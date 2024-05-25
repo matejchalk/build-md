@@ -1,0 +1,46 @@
+{
+  "name": "markdown-formatter",
+  "version": "0.0.0",
+  "description": "Markdown string builder",
+  "license": "MIT",
+  "author": "Matěj Chalk <matejchalk@gmail.com>",
+  "keywords": [
+    "markdown",
+    "md",
+    "builder"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/matejchalk/markdown-formatter.git"
+  },
+  "homepage": "https://github.com/matejchalk/markdown-formatter#readme",
+  "bugs": {
+    "url": "https://github.com/matejchalk/markdown-formatter/issues"
+  },
+  "type": "module",
+  "files": [
+    "dist/"
+  ],
+  "types": "dist/index.d.ts",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  }
+}
