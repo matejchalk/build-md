@@ -1,1 +1,1 @@
-export function markdownDocument() {}
+export { MarkdownDocument } from './MarkdownDocument';
