@@ -1,6 +1,7 @@
-import type { IMark } from '../mark';
+import type { RenderContext } from '../context';
+import { renderHtml } from '../html';
+import { addMark, type IMark } from '../mark';
 import type { FormattedTextItem, TextInput } from '../text';
-import { addMark } from '../utils';
 import type { BoldMark } from './bold';
 import type { CodeMark } from './code';
 import type { FootnoteMark } from './footnote';
@@ -20,4 +21,11 @@ export function italic<TInnerMarks extends ItalicInnerMarks>(
   return addMark(text, new ItalicMark());
 }
 
-export class ItalicMark implements IMark {}
+export class ItalicMark implements IMark {
+  render(text: string, ctx: RenderContext): string {
+    if (ctx.isHtmlOnly) {
+      return renderHtml({ tag: 'i', text });
+    }
+    return `_${text}_`;
+  }
+}

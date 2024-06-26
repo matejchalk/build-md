@@ -1,9 +1,6 @@
 export type RenderContext = {
   isHtmlOnly: boolean;
   isSingleLine: boolean;
-};
-
-export const DEFAULT_RENDER_CONTEXT: RenderContext = {
-  isHtmlOnly: false,
-  isSingleLine: false,
+  generateFootnoteLabel(): string;
+  registerFootnote(label: string, text: string): void;
 };
