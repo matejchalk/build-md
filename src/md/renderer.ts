@@ -1,25 +1,41 @@
-import type { IBlock } from './block';
+import { Block } from './elements';
 import type { BlockText, InlineText } from './text';
 
 export class Renderer {
   readonly #counters = new Map<string, number>();
-  readonly #extraBlocks: IBlock[] = [];
+  readonly #extraBlocks: Block[] = [];
 
-  renderText(text: InlineText | BlockText, isHtml = false): string {
+  renderText(text: InlineText | BlockText): string {
+    return this.#render(text, 'markdown');
+  }
+
+  renderTextAsHtml(text: InlineText | BlockText): string {
+    return this.#render(text, 'html');
+  }
+
+  renderInline(text: InlineText | BlockText): string {
+    return this.#render(text, 'inline');
+  }
+
+  #render(
+    text: InlineText | BlockText,
+    mode: 'markdown' | 'inline' | 'html'
+  ): string {
     if (Array.isArray(text)) {
-      return text.map(item => this.renderText(item, isHtml)).join('');
+      return text.map(item => this.#render(item, mode)).join('');
     }
     if (typeof text === 'string') {
       return text;
     }
-    if (isHtml) {
-      return text.renderAsHtml(this);
-    }
-    return text.render(this);
-  }
 
-  renderTextAsHtml(text: InlineText | BlockText): string {
-    return this.renderText(text, true);
+    switch (mode) {
+      case 'markdown':
+        return text.render(this);
+      case 'html':
+        return text.renderAsHtml(this);
+      case 'inline':
+        return text.renderInline(this);
+    }
   }
 
   renderHtmlElement({ tag, attrs, content }: HtmlElement): string {
@@ -52,11 +68,11 @@ export class Renderer {
     return newValue;
   }
 
-  appendBlock(block: IBlock): void {
+  appendBlock(block: Block): void {
     this.#extraBlocks.push(block);
   }
 
-  get extraBlocks(): IBlock[] {
+  get extraBlocks(): Block[] {
     return this.#extraBlocks;
   }
 }

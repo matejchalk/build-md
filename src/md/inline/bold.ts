@@ -1,4 +1,4 @@
-import type { IMark } from '../mark';
+import { Mark } from '../elements';
 import type { Renderer } from '../renderer';
 import type { InlineText } from '../text';
 import type { CodeMark } from './code';
@@ -20,10 +20,12 @@ export function bold<TInnerMarks extends BoldInnerMarks>(
   return new BoldMark<TInnerMarks>(text);
 }
 
-export class BoldMark<TInnerMarks extends BoldInnerMarks = BoldInnerMarks>
-  implements IMark
-{
-  constructor(public readonly text: InlineText<TInnerMarks>) {}
+export class BoldMark<
+  TInnerMarks extends BoldInnerMarks = BoldInnerMarks
+> extends Mark {
+  constructor(public readonly text: InlineText<TInnerMarks>) {
+    super();
+  }
 
   render(renderer: Renderer): string {
     const text = renderer.renderText(this.text);

@@ -1,4 +1,4 @@
-import type { IBlock } from '../block';
+import { Block } from '../elements';
 import type { Renderer } from '../renderer';
 import type { BlockText } from '../text';
 
@@ -6,8 +6,10 @@ export function paragraph(text: BlockText): ParagraphBlock {
   return new ParagraphBlock(text);
 }
 
-export class ParagraphBlock implements IBlock {
-  constructor(public readonly text: BlockText) {}
+export class ParagraphBlock extends Block {
+  constructor(public readonly text: BlockText) {
+    super();
+  }
 
   render(renderer: Renderer): string {
     return renderer.renderText(this.text);
@@ -18,9 +20,5 @@ export class ParagraphBlock implements IBlock {
       tag: 'p',
       content: renderer.renderTextAsHtml(this.text),
     });
-  }
-
-  renderInline(renderer: Renderer): string {
-    return this.renderAsHtml(renderer);
   }
 }

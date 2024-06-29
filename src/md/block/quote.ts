@@ -1,4 +1,4 @@
-import type { IBlock } from '../block';
+import { Block } from '../elements';
 import type { Renderer } from '../renderer';
 import type { BlockText } from '../text';
 
@@ -6,8 +6,10 @@ export function quote(text: BlockText): QuoteBlock {
   return new QuoteBlock(text);
 }
 
-export class QuoteBlock implements IBlock {
-  constructor(public readonly text: BlockText) {}
+export class QuoteBlock extends Block {
+  constructor(public readonly text: BlockText) {
+    super();
+  }
 
   render(renderer: Renderer): string {
     const text = renderer.renderText(this.text);
@@ -22,9 +24,5 @@ export class QuoteBlock implements IBlock {
       tag: 'blockquote',
       content: renderer.renderTextAsHtml(this.text),
     });
-  }
-
-  renderInline(renderer: Renderer): string {
-    return this.renderAsHtml(renderer);
   }
 }

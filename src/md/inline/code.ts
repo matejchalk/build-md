@@ -1,12 +1,14 @@
-import type { IMark } from '../mark';
+import { Mark } from '../elements';
 import type { Renderer } from '../renderer';
 
 export function code(text: string): CodeMark {
   return new CodeMark(text);
 }
 
-export class CodeMark implements IMark {
-  constructor(public readonly text: string) {}
+export class CodeMark extends Mark {
+  constructor(public readonly text: string) {
+    super();
+  }
 
   render(_: Renderer): string {
     return `\`\`\`${this.text}\`\`\``;

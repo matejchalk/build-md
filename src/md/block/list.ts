@@ -1,4 +1,4 @@
-import type { IBlock } from '../block';
+import { Block } from '../elements';
 import type { Renderer } from '../renderer';
 import type { BlockText } from '../text';
 
@@ -60,8 +60,10 @@ export function list(
   }
 }
 
-export class UnorderedListBlock implements IBlock {
-  constructor(public readonly items: UnorderedListItemBlock[]) {}
+export class UnorderedListBlock extends Block {
+  constructor(public readonly items: UnorderedListItemBlock[]) {
+    super();
+  }
 
   render(renderer: Renderer): string {
     return this.items.map(item => item.render(renderer)).join('\n');
@@ -73,14 +75,12 @@ export class UnorderedListBlock implements IBlock {
       content: this.items.map(item => item.renderAsHtml(renderer)).join(''),
     });
   }
-
-  renderInline(renderer: Renderer): string {
-    return this.renderAsHtml(renderer);
-  }
 }
 
-export class UnorderedListItemBlock implements IBlock {
-  constructor(public readonly text: BlockText) {}
+export class UnorderedListItemBlock extends Block {
+  constructor(public readonly text: BlockText) {
+    super();
+  }
 
   render(renderer: Renderer): string {
     return `- ${renderer.renderText(this.text)}`;
@@ -92,14 +92,12 @@ export class UnorderedListItemBlock implements IBlock {
       content: renderer.renderTextAsHtml(this.text),
     });
   }
-
-  renderInline(renderer: Renderer): string {
-    return this.renderAsHtml(renderer);
-  }
 }
 
-export class OrderedListBlock implements IBlock {
-  constructor(public readonly items: OrderedListItemBlock[]) {}
+export class OrderedListBlock extends Block {
+  constructor(public readonly items: OrderedListItemBlock[]) {
+    super();
+  }
 
   render(renderer: Renderer): string {
     return this.items.map(item => item.render(renderer)).join('\n');
@@ -111,18 +109,16 @@ export class OrderedListBlock implements IBlock {
       content: this.items.map(item => item.renderAsHtml(renderer)).join(''),
     });
   }
-
-  renderInline(renderer: Renderer): string {
-    return this.renderAsHtml(renderer);
-  }
 }
 
-export class OrderedListItemBlock implements IBlock {
+export class OrderedListItemBlock extends Block {
   constructor(
     public readonly text: BlockText,
     public readonly order: number,
     public readonly count: number
-  ) {}
+  ) {
+    super();
+  }
 
   render(renderer: Renderer): string {
     const maxDigits = Math.floor(Math.log10(this.count || 1)) + 1;
@@ -136,14 +132,12 @@ export class OrderedListItemBlock implements IBlock {
       content: renderer.renderTextAsHtml(this.text),
     });
   }
-
-  renderInline(renderer: Renderer): string {
-    return this.renderAsHtml(renderer);
-  }
 }
 
-export class TaskListBlock implements IBlock {
-  constructor(public readonly items: TaskListItemBlock[]) {}
+export class TaskListBlock extends Block {
+  constructor(public readonly items: TaskListItemBlock[]) {
+    super();
+  }
 
   render(renderer: Renderer): string {
     return this.items.map(item => item.render(renderer)).join('\n');
@@ -155,17 +149,15 @@ export class TaskListBlock implements IBlock {
       content: this.items.map(item => item.renderAsHtml(renderer)).join(''),
     });
   }
-
-  renderInline(renderer: Renderer): string {
-    return this.renderAsHtml(renderer);
-  }
 }
 
-export class TaskListItemBlock implements IBlock {
+export class TaskListItemBlock extends Block {
   constructor(
     public readonly text: BlockText,
     public readonly checked: boolean
-  ) {}
+  ) {
+    super();
+  }
 
   render(renderer: Renderer): string {
     return `- [${this.checked ? 'x' : ' '}] ${renderer.renderText(this.text)}`;
@@ -182,9 +174,5 @@ export class TaskListItemBlock implements IBlock {
         renderer.renderTextAsHtml(this.text),
       ].join(' '),
     });
-  }
-
-  renderInline(renderer: Renderer): string {
-    return this.renderAsHtml(renderer);
   }
 }

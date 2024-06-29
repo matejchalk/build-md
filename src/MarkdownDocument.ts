@@ -4,7 +4,7 @@ import {
   type ListKind,
   type TableCellAlignment,
 } from './md';
-import type { IBlock } from './md/block';
+import type { Block } from './md/elements';
 import type { BlockText, InlineText } from './md/text';
 
 type Conditional<T> = T | null | undefined | false;
@@ -15,7 +15,7 @@ type MarkdownDocumentOptions = {
 
 export class MarkdownDocument {
   #options: Required<MarkdownDocumentOptions>;
-  #blocks: IBlock[] = [];
+  #blocks: Block[] = [];
 
   constructor(options?: MarkdownDocumentOptions) {
     this.#options = {
@@ -74,7 +74,7 @@ export class MarkdownDocument {
     return this.#append(md.table(columns, rows));
   }
 
-  #append(block: IBlock): MarkdownDocument {
+  #append(block: Block): MarkdownDocument {
     if (this.#options.mutable) {
       this.#blocks.push(block);
       return this;

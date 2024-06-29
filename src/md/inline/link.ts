@@ -1,4 +1,4 @@
-import type { IMark } from '../mark';
+import { Mark } from '../elements';
 import type { Renderer } from '../renderer';
 import type { InlineText } from '../text';
 import type { BoldMark } from './bold';
@@ -22,12 +22,14 @@ export function link(
   return new LinkMark(href, text, title);
 }
 
-export class LinkMark implements IMark {
+export class LinkMark extends Mark {
   constructor(
     public readonly href: string,
     public readonly text?: InlineText<LinkInnerMarks>,
     public readonly title?: string
-  ) {}
+  ) {
+    super();
+  }
 
   render(renderer: Renderer): string {
     const text = this.text && renderer.renderText(this.text);

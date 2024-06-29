@@ -1,12 +1,14 @@
-import type { IBlock } from '../block';
+import { Block } from '../elements';
 import type { Renderer } from '../renderer';
 
 export function codeBlock(text: string, lang?: string): CodeBlock {
   return new CodeBlock(text, lang);
 }
 
-export class CodeBlock implements IBlock {
-  constructor(public readonly text: string, public readonly lang?: string) {}
+export class CodeBlock extends Block {
+  constructor(public readonly text: string, public readonly lang?: string) {
+    super();
+  }
 
   render(_: Renderer): string {
     const backticks = '```';
@@ -21,9 +23,5 @@ export class CodeBlock implements IBlock {
         content: this.text,
       }),
     });
-  }
-
-  renderInline(renderer: Renderer): string {
-    return this.renderAsHtml(renderer);
   }
 }

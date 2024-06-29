@@ -1,4 +1,4 @@
-import type { IMark } from '../mark';
+import { Mark } from '../elements';
 import type { Renderer } from '../renderer';
 import type { InlineText } from '../text';
 import type { BoldMark } from './bold';
@@ -20,8 +20,10 @@ export function strikethrough(
   return new StrikethroughMark(text);
 }
 
-export class StrikethroughMark implements IMark {
-  constructor(public readonly text: InlineText<StrikethroughInnerMarks>) {}
+export class StrikethroughMark extends Mark {
+  constructor(public readonly text: InlineText<StrikethroughInnerMarks>) {
+    super();
+  }
 
   render(renderer: Renderer): string {
     const text = renderer.renderText(this.text);

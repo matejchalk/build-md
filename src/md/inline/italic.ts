@@ -1,4 +1,4 @@
-import type { IMark } from '../mark';
+import { Mark } from '../elements';
 import type { Renderer } from '../renderer';
 import type { InlineText } from '../text';
 import type { BoldMark } from './bold';
@@ -18,8 +18,10 @@ export function italic(text: InlineText<ItalicInnerMarks>): ItalicMark {
   return new ItalicMark(text);
 }
 
-export class ItalicMark implements IMark {
-  constructor(public readonly text: InlineText<ItalicInnerMarks>) {}
+export class ItalicMark extends Mark {
+  constructor(public readonly text: InlineText<ItalicInnerMarks>) {
+    super();
+  }
 
   render(renderer: Renderer): string {
     const text = renderer.renderText(this.text);

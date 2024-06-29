@@ -1,4 +1,4 @@
-import type { IBlock } from '../block';
+import { Block } from '../elements';
 import type { Renderer } from '../renderer';
 import type { BlockText } from '../text';
 
@@ -21,11 +21,13 @@ export function table(
   );
 }
 
-export class TableBlock implements IBlock {
+export class TableBlock extends Block {
   constructor(
     public readonly columns: TableColumnBlock[],
     public readonly rows: TableRowBlock[]
-  ) {}
+  ) {
+    super();
+  }
 
   render(renderer: Renderer): string {
     return [
@@ -62,17 +64,15 @@ export class TableBlock implements IBlock {
       ].join(''),
     });
   }
-
-  renderInline(renderer: Renderer): string {
-    return this.renderAsHtml(renderer);
-  }
 }
 
-export class TableColumnBlock implements IBlock {
+export class TableColumnBlock extends Block {
   constructor(
     public readonly heading: BlockText,
     public readonly alignment?: TableCellAlignment
-  ) {}
+  ) {
+    super();
+  }
 
   render(renderer: Renderer): string {
     return renderer.renderText(this.heading);
@@ -85,18 +85,16 @@ export class TableColumnBlock implements IBlock {
       content: renderer.renderTextAsHtml(this.heading),
     });
   }
-
-  renderInline(renderer: Renderer): string {
-    return this.renderAsHtml(renderer);
-  }
 }
 
-export class TableRowBlock implements IBlock {
-  constructor(public readonly cells: BlockText[]) {}
+export class TableRowBlock extends Block {
+  constructor(public readonly cells: BlockText[]) {
+    super();
+  }
 
   render(renderer: Renderer): string {
     return `| ${this.cells
-      .map(cell => renderer.renderText(cell))
+      .map(cell => renderer.renderInline(cell))
       .join(' | ')} |`;
   }
 
@@ -112,9 +110,5 @@ export class TableRowBlock implements IBlock {
         )
         .join(''),
     });
-  }
-
-  renderInline(renderer: Renderer): string {
-    return this.renderAsHtml(renderer);
   }
 }
