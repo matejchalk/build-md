@@ -1,9 +1,22 @@
-import { Block } from './elements';
+import type { Block } from './elements';
 import type { BlockText, InlineText } from './text';
 
 export class Renderer {
   readonly #counters = new Map<string, number>();
   readonly #extraBlocks: Block[] = [];
+
+  renderDocument(blocks: Block[]): string {
+    let blocksToRender = blocks;
+    const renderedBlocks: string[] = [];
+
+    while (blocksToRender.length > 0) {
+      this.#extraBlocks.length = 0;
+      renderedBlocks.push(...blocksToRender.map(block => block.render(this)));
+      blocksToRender = this.#extraBlocks;
+    }
+
+    return renderedBlocks.filter(Boolean).join('\n\n');
+  }
 
   renderText(text: InlineText | BlockText): string {
     return this.#render(text, 'markdown');

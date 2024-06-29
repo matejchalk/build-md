@@ -5,6 +5,7 @@ import {
   type TableCellAlignment,
 } from './md';
 import type { Block } from './md/elements';
+import { Renderer } from './md/renderer';
 import type { BlockText, InlineText } from './md/text';
 
 type Conditional<T> = T | null | undefined | false;
@@ -72,6 +73,10 @@ export class MarkdownDocument {
   ): MarkdownDocument {
     if (columns.length === 0) return this;
     return this.#append(md.table(columns, rows));
+  }
+
+  toString(): string {
+    return new Renderer().renderDocument(this.#blocks);
   }
 
   #append(block: Block): MarkdownDocument {
