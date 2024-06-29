@@ -32,7 +32,15 @@ class FootnoteBlock implements IBlock {
   ) {}
 
   render(renderer: Renderer): string {
-    const text = renderer.renderInlineText(this.text);
+    const text = renderer.renderText(this.text);
     return `[^${this.label}]: ${text}`;
+  }
+
+  renderAsHtml(renderer: Renderer): string {
+    return this.render(renderer);
+  }
+
+  renderInline(renderer: Renderer): string {
+    return this.renderAsHtml(renderer);
   }
 }

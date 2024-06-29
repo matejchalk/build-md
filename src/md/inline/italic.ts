@@ -22,14 +22,14 @@ export class ItalicMark implements IMark {
   constructor(public readonly text: InlineText<ItalicInnerMarks>) {}
 
   render(renderer: Renderer): string {
-    const text = renderer.renderInlineText(this.text);
+    const text = renderer.renderText(this.text);
     return `_${text}_`;
   }
 
   renderAsHtml(renderer: Renderer): string {
     return renderer.renderHtmlElement({
       tag: 'i',
-      content: renderer.renderInlineTextAsHtml(this.text),
+      content: renderer.renderTextAsHtml(this.text),
     });
   }
 }

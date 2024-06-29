@@ -26,14 +26,14 @@ export class BoldMark<TInnerMarks extends BoldInnerMarks = BoldInnerMarks>
   constructor(public readonly text: InlineText<TInnerMarks>) {}
 
   render(renderer: Renderer): string {
-    const text = renderer.renderInlineText(this.text);
+    const text = renderer.renderText(this.text);
     return `**${text}**`;
   }
 
   renderAsHtml(renderer: Renderer): string {
     return renderer.renderHtmlElement({
       tag: 'b',
-      content: renderer.renderInlineTextAsHtml(this.text),
+      content: renderer.renderTextAsHtml(this.text),
     });
   }
 }

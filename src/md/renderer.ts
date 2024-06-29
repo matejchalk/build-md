@@ -1,13 +1,13 @@
 import type { IBlock } from './block';
-import type { InlineText } from './text';
+import type { BlockText, InlineText } from './text';
 
 export class Renderer {
   readonly #counters = new Map<string, number>();
   readonly #extraBlocks: IBlock[] = [];
 
-  renderInlineText(text: InlineText, isHtml = false): string {
+  renderText(text: InlineText | BlockText, isHtml = false): string {
     if (Array.isArray(text)) {
-      return text.map(item => this.renderInlineText(item, isHtml)).join('');
+      return text.map(item => this.renderText(item, isHtml)).join('');
     }
     if (typeof text === 'string') {
       return text;
@@ -18,13 +18,19 @@ export class Renderer {
     return text.render(this);
   }
 
-  renderInlineTextAsHtml(text: InlineText): string {
-    return this.renderInlineText(text, true);
+  renderTextAsHtml(text: InlineText | BlockText): string {
+    return this.renderText(text, true);
   }
 
   renderHtmlElement({ tag, attrs, content }: HtmlElement): string {
     const attributes = Object.entries(attrs ?? {})
-      .map(([key, value]) => ` ${key}="${value}"`)
+      .map(([key, value]) =>
+        typeof value === 'boolean'
+          ? value
+            ? ` ${key}`
+            : ''
+          : ` ${key}="${value}"`
+      )
       .join('');
 
     if (!content) {
@@ -57,6 +63,6 @@ export class Renderer {
 
 type HtmlElement = {
   tag: string;
-  attrs?: Record<string, string>;
+  attrs?: Record<string, string | boolean>;
   content?: string | HtmlElement | HtmlElement[];
 };

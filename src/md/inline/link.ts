@@ -30,7 +30,7 @@ export class LinkMark implements IMark {
   ) {}
 
   render(renderer: Renderer): string {
-    const text = this.text && renderer.renderInlineText(this.text);
+    const text = this.text && renderer.renderText(this.text);
     if (!text && !this.title) {
       return `<${this.href}>`;
     }
@@ -43,9 +43,7 @@ export class LinkMark implements IMark {
     return renderer.renderHtmlElement({
       tag: 'a',
       attrs: { href: this.href, ...(this.title && { title: this.title }) },
-      content: this.text
-        ? renderer.renderInlineTextAsHtml(this.text)
-        : this.href,
+      content: this.text ? renderer.renderTextAsHtml(this.text) : this.href,
     });
   }
 }

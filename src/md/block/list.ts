@@ -1,4 +1,5 @@
 import type { IBlock } from '../block';
+import type { Renderer } from '../renderer';
 import type { BlockText } from '../text';
 
 export type ListKind = 'unordered' | 'ordered' | 'task';
@@ -40,7 +41,10 @@ export function list(
 
     case 'ordered':
       return new OrderedListBlock(
-        items.map(item => new OrderedListItemBlock(extractText(item)))
+        items.map(
+          (item, index) =>
+            new OrderedListItemBlock(extractText(item), index + 1, items.length)
+        )
       );
 
     case 'task':
@@ -58,22 +62,103 @@ export function list(
 
 export class UnorderedListBlock implements IBlock {
   constructor(public readonly items: UnorderedListItemBlock[]) {}
+
+  render(renderer: Renderer): string {
+    return this.items.map(item => item.render(renderer)).join('\n');
+  }
+
+  renderAsHtml(renderer: Renderer): string {
+    return renderer.renderHtmlElement({
+      tag: 'ul',
+      content: this.items.map(item => item.renderAsHtml(renderer)).join(''),
+    });
+  }
+
+  renderInline(renderer: Renderer): string {
+    return this.renderAsHtml(renderer);
+  }
 }
 
 export class UnorderedListItemBlock implements IBlock {
   constructor(public readonly text: BlockText) {}
+
+  render(renderer: Renderer): string {
+    return `- ${renderer.renderText(this.text)}`;
+  }
+
+  renderAsHtml(renderer: Renderer): string {
+    return renderer.renderHtmlElement({
+      tag: 'li',
+      content: renderer.renderTextAsHtml(this.text),
+    });
+  }
+
+  renderInline(renderer: Renderer): string {
+    return this.renderAsHtml(renderer);
+  }
 }
 
 export class OrderedListBlock implements IBlock {
   constructor(public readonly items: OrderedListItemBlock[]) {}
+
+  render(renderer: Renderer): string {
+    return this.items.map(item => item.render(renderer)).join('\n');
+  }
+
+  renderAsHtml(renderer: Renderer): string {
+    return renderer.renderHtmlElement({
+      tag: 'ol',
+      content: this.items.map(item => item.renderAsHtml(renderer)).join(''),
+    });
+  }
+
+  renderInline(renderer: Renderer): string {
+    return this.renderAsHtml(renderer);
+  }
 }
 
 export class OrderedListItemBlock implements IBlock {
-  constructor(public readonly text: BlockText) {}
+  constructor(
+    public readonly text: BlockText,
+    public readonly order: number,
+    public readonly count: number
+  ) {}
+
+  render(renderer: Renderer): string {
+    const maxDigits = Math.floor(Math.log10(this.count || 1)) + 1;
+    const prefix = this.order.toString().padStart(maxDigits, ' ');
+    return `${prefix} ${renderer.renderText(this.text)}`;
+  }
+
+  renderAsHtml(renderer: Renderer): string {
+    return renderer.renderHtmlElement({
+      tag: 'li',
+      content: renderer.renderTextAsHtml(this.text),
+    });
+  }
+
+  renderInline(renderer: Renderer): string {
+    return this.renderAsHtml(renderer);
+  }
 }
 
 export class TaskListBlock implements IBlock {
   constructor(public readonly items: TaskListItemBlock[]) {}
+
+  render(renderer: Renderer): string {
+    return this.items.map(item => item.render(renderer)).join('\n');
+  }
+
+  renderAsHtml(renderer: Renderer): string {
+    return renderer.renderHtmlElement({
+      tag: 'ul',
+      content: this.items.map(item => item.renderAsHtml(renderer)).join(''),
+    });
+  }
+
+  renderInline(renderer: Renderer): string {
+    return this.renderAsHtml(renderer);
+  }
 }
 
 export class TaskListItemBlock implements IBlock {
@@ -81,4 +166,25 @@ export class TaskListItemBlock implements IBlock {
     public readonly text: BlockText,
     public readonly checked: boolean
   ) {}
+
+  render(renderer: Renderer): string {
+    return `- [${this.checked ? 'x' : ' '}] ${renderer.renderText(this.text)}`;
+  }
+
+  renderAsHtml(renderer: Renderer): string {
+    return renderer.renderHtmlElement({
+      tag: 'li',
+      content: [
+        renderer.renderHtmlElement({
+          tag: 'input',
+          attrs: { checked: this.checked },
+        }),
+        renderer.renderTextAsHtml(this.text),
+      ].join(' '),
+    });
+  }
+
+  renderInline(renderer: Renderer): string {
+    return this.renderAsHtml(renderer);
+  }
 }

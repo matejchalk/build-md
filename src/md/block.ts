@@ -1,4 +1,9 @@
+import type { Renderer } from './renderer';
+
 export interface IBlock {
-  // TODO
-  // render(renderer: Renderer): string;
+  render(renderer: Renderer): string;
+
+  renderAsHtml(renderer: Renderer): string;
+
+  renderInline(renderer: Renderer): string;
 }

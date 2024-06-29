@@ -24,14 +24,14 @@ export class StrikethroughMark implements IMark {
   constructor(public readonly text: InlineText<StrikethroughInnerMarks>) {}
 
   render(renderer: Renderer): string {
-    const text = renderer.renderInlineText(this.text);
+    const text = renderer.renderText(this.text);
     return `~~${text}~~`;
   }
 
   renderAsHtml(renderer: Renderer): string {
     return renderer.renderHtmlElement({
       tag: 's',
-      content: renderer.renderInlineTextAsHtml(this.text),
+      content: renderer.renderTextAsHtml(this.text),
     });
   }
 }
