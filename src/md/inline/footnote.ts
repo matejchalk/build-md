@@ -1,7 +1,7 @@
 import type { IBlock } from '../block';
-import type { RenderContext } from '../context';
 import type { IMark } from '../mark';
-import { renderInlineText, type InlineText } from '../text';
+import type { Renderer } from '../renderer';
+import type { InlineText } from '../text';
 
 export function footnote(text: InlineText, label?: string): FootnoteMark {
   return new FootnoteMark(text, label);
@@ -13,10 +13,15 @@ export class FootnoteMark implements IMark {
     public readonly label?: string
   ) {}
 
-  render(ctx: RenderContext): string {
-    const label = this.label || ctx.incrementCounter('footnotes').toString();
-    ctx.appendBlock(new FootnoteBlock(this.text, label));
+  render(renderer: Renderer): string {
+    const label =
+      this.label || renderer.incrementCounter('footnotes').toString();
+    renderer.appendBlock(new FootnoteBlock(this.text, label));
     return `[^${label}]`;
+  }
+
+  renderAsHtml(renderer: Renderer): string {
+    return this.render(renderer);
   }
 }
 
@@ -26,8 +31,8 @@ class FootnoteBlock implements IBlock {
     public readonly label: string
   ) {}
 
-  render(ctx: RenderContext): string {
-    const text = renderInlineText(this.text, ctx);
+  render(renderer: Renderer): string {
+    const text = renderer.renderInlineText(this.text);
     return `[^${this.label}]: ${text}`;
   }
 }

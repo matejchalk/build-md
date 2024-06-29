@@ -1,7 +1,6 @@
-import type { RenderContext } from '../context';
-import { renderHtml } from '../html';
 import type { IMark } from '../mark';
-import { renderInlineText, type InlineText } from '../text';
+import type { Renderer } from '../renderer';
+import type { InlineText } from '../text';
 import type { CodeMark } from './code';
 import type { FootnoteMark } from './footnote';
 import type { ItalicMark } from './italic';
@@ -26,11 +25,15 @@ export class BoldMark<TInnerMarks extends BoldInnerMarks = BoldInnerMarks>
 {
   constructor(public readonly text: InlineText<TInnerMarks>) {}
 
-  render(ctx: RenderContext): string {
-    const text = renderInlineText(this.text, ctx);
-    if (ctx.isHtmlOnly) {
-      return renderHtml({ tag: 'b', text });
-    }
+  render(renderer: Renderer): string {
+    const text = renderer.renderInlineText(this.text);
     return `**${text}**`;
+  }
+
+  renderAsHtml(renderer: Renderer): string {
+    return renderer.renderHtmlElement({
+      tag: 'b',
+      content: renderer.renderInlineTextAsHtml(this.text),
+    });
   }
 }

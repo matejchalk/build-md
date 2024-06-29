@@ -1,7 +1,6 @@
-import type { RenderContext } from '../context';
-import { renderHtml } from '../html';
 import type { IMark } from '../mark';
-import { renderInlineText, type InlineText } from '../text';
+import type { Renderer } from '../renderer';
+import type { InlineText } from '../text';
 import type { BoldMark } from './bold';
 import type { CodeMark } from './code';
 import type { ImageMark } from './image';
@@ -30,20 +29,23 @@ export class LinkMark implements IMark {
     public readonly title?: string
   ) {}
 
-  render(ctx: RenderContext): string {
-    const text = renderInlineText(this.text ?? '', ctx);
-    if (ctx.isHtmlOnly) {
-      return renderHtml({
-        tag: 'a',
-        attrs: { href: this.href, ...(this.title && { title: this.title }) },
-        text: text || this.href,
-      });
-    }
+  render(renderer: Renderer): string {
+    const text = this.text && renderer.renderInlineText(this.text);
     if (!text && !this.title) {
       return `<${this.href}>`;
     }
     return `[${text || this.href}](${this.href}${
       this.title ? ` "${this.title}"` : ''
     })`;
+  }
+
+  renderAsHtml(renderer: Renderer): string {
+    return renderer.renderHtmlElement({
+      tag: 'a',
+      attrs: { href: this.href, ...(this.title && { title: this.title }) },
+      content: this.text
+        ? renderer.renderInlineTextAsHtml(this.text)
+        : this.href,
+    });
   }
 }

@@ -1,7 +1,6 @@
-import type { RenderContext } from '../context';
-import { renderHtml } from '../html';
 import type { IMark } from '../mark';
-import { renderInlineText, type InlineText } from '../text';
+import type { Renderer } from '../renderer';
+import type { InlineText } from '../text';
 import type { BoldMark } from './bold';
 import type { CodeMark } from './code';
 import type { FootnoteMark } from './footnote';
@@ -22,11 +21,15 @@ export function italic(text: InlineText<ItalicInnerMarks>): ItalicMark {
 export class ItalicMark implements IMark {
   constructor(public readonly text: InlineText<ItalicInnerMarks>) {}
 
-  render(ctx: RenderContext): string {
-    const text = renderInlineText(this.text, ctx);
-    if (ctx.isHtmlOnly) {
-      return renderHtml({ tag: 'i', text });
-    }
+  render(renderer: Renderer): string {
+    const text = renderer.renderInlineText(this.text);
     return `_${text}_`;
+  }
+
+  renderAsHtml(renderer: Renderer): string {
+    return renderer.renderHtmlElement({
+      tag: 'i',
+      content: renderer.renderInlineTextAsHtml(this.text),
+    });
   }
 }

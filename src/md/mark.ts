@@ -1,5 +1,7 @@
-import type { RenderContext } from './context';
+import type { Renderer } from './renderer';
 
 export interface IMark {
-  render(ctx: RenderContext): string;
+  render(renderer: Renderer): string;
+
+  renderAsHtml(renderer: Renderer): string;
 }
