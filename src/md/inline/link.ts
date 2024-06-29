@@ -1,7 +1,7 @@
 import type { RenderContext } from '../context';
 import { renderHtml } from '../html';
-import { addMark, type IMark } from '../mark';
-import type { FormattedTextItem, TextInput } from '../text';
+import type { IMark } from '../mark';
+import { renderInlineText, type InlineText } from '../text';
 import type { BoldMark } from './bold';
 import type { CodeMark } from './code';
 import type { ImageMark } from './image';
@@ -15,18 +15,23 @@ type LinkInnerMarks =
   | ImageMark
   | StrikethroughMark;
 
-export function link<TInnerMarks extends LinkInnerMarks>(
+export function link(
   href: string,
-  text?: TextInput<TInnerMarks>,
+  text?: InlineText<LinkInnerMarks>,
   title?: string
-): FormattedTextItem<LinkMark | TInnerMarks> {
-  return addMark(text ?? '', new LinkMark(href, title));
+): LinkMark {
+  return new LinkMark(href, text, title);
 }
 
 export class LinkMark implements IMark {
-  constructor(public readonly href: string, public readonly title?: string) {}
+  constructor(
+    public readonly href: string,
+    public readonly text?: InlineText<LinkInnerMarks>,
+    public readonly title?: string
+  ) {}
 
-  render(text: string, ctx: RenderContext): string {
+  render(ctx: RenderContext): string {
+    const text = renderInlineText(this.text ?? '', ctx);
     if (ctx.isHtmlOnly) {
       return renderHtml({
         tag: 'a',

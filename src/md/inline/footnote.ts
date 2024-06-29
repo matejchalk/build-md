@@ -1,24 +1,33 @@
+import type { IBlock } from '../block';
 import type { RenderContext } from '../context';
-import { addMark, type IMark } from '../mark';
-import type { FormattedTextItem, TextInput } from '../text';
+import type { IMark } from '../mark';
+import { renderInlineText, type InlineText } from '../text';
 
-export function footnote(
-  text: TextInput,
-  label?: string
-): FormattedTextItem<FootnoteMark | IMark> {
-  return addMark(text, new FootnoteMark(label));
+export function footnote(text: InlineText, label?: string): FootnoteMark {
+  return new FootnoteMark(text, label);
 }
 
 export class FootnoteMark implements IMark {
-  constructor(public readonly label?: string) {}
+  constructor(
+    public readonly text: InlineText,
+    public readonly label?: string
+  ) {}
 
-  render(text: string, ctx: RenderContext): string {
-    const label = this.label || ctx.generateFootnoteLabel();
-    ctx.registerFootnote(label, text);
+  render(ctx: RenderContext): string {
+    const label = this.label || ctx.incrementCounter('footnotes').toString();
+    ctx.appendBlock(new FootnoteBlock(this.text, label));
     return `[^${label}]`;
   }
+}
 
-  static renderText(label: string, text: string): string {
-    return `[^${label}]: ${text}`;
+class FootnoteBlock implements IBlock {
+  constructor(
+    public readonly text: InlineText,
+    public readonly label: string
+  ) {}
+
+  render(ctx: RenderContext): string {
+    const text = renderInlineText(this.text, ctx);
+    return `[^${this.label}]: ${text}`;
   }
 }

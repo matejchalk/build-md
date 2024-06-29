@@ -1,6 +1,8 @@
+import type { IBlock } from './block';
+
 export type RenderContext = {
   isHtmlOnly: boolean;
   isSingleLine: boolean;
-  generateFootnoteLabel(): string;
-  registerFootnote(label: string, text: string): void;
+  incrementCounter(name: string): number;
+  appendBlock(block: IBlock): void;
 };

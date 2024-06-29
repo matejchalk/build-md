@@ -1,17 +1,18 @@
 import type { RenderContext } from '../context';
 import { renderHtml } from '../html';
-import { addMark, type IMark } from '../mark';
-import type { FormattedTextItem } from '../text';
+import type { IMark } from '../mark';
 
-export function code(text: string): FormattedTextItem<CodeMark> {
-  return addMark(text, new CodeMark());
+export function code(text: string): CodeMark {
+  return new CodeMark(text);
 }
 
 export class CodeMark implements IMark {
-  render(text: string, ctx: RenderContext): string {
+  constructor(public readonly text: string) {}
+
+  render(ctx: RenderContext): string {
     if (ctx.isHtmlOnly) {
-      return renderHtml({ tag: 'code', text });
+      return renderHtml({ tag: 'code', text: this.text });
     }
-    return `\`\`\`${text}\`\`\``;
+    return `\`\`\`${this.text}\`\`\``;
   }
 }

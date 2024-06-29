@@ -1,7 +1,7 @@
 import type { RenderContext } from '../context';
 import { renderHtml } from '../html';
-import { addMark, type IMark } from '../mark';
-import type { FormattedTextItem, TextInput } from '../text';
+import type { IMark } from '../mark';
+import { renderInlineText, type InlineText } from '../text';
 import type { BoldMark } from './bold';
 import type { CodeMark } from './code';
 import type { FootnoteMark } from './footnote';
@@ -15,14 +15,17 @@ type StrikethroughInnerMarks =
   | ItalicMark
   | LinkMark;
 
-export function strikethrough<TInnerMarks extends StrikethroughInnerMarks>(
-  text: TextInput<TInnerMarks>
-): FormattedTextItem<StrikethroughMark | TInnerMarks> {
-  return addMark(text, new StrikethroughMark());
+export function strikethrough(
+  text: InlineText<StrikethroughInnerMarks>
+): StrikethroughMark {
+  return new StrikethroughMark(text);
 }
 
 export class StrikethroughMark implements IMark {
-  render(text: string, ctx: RenderContext): string {
+  constructor(public readonly text: InlineText<StrikethroughInnerMarks>) {}
+
+  render(ctx: RenderContext): string {
+    const text = renderInlineText(this.text, ctx);
     if (ctx.isHtmlOnly) {
       return renderHtml({ tag: 's', text });
     }
