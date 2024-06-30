@@ -169,7 +169,10 @@ export class TaskListItemBlock extends Block {
       content: [
         renderer.renderHtmlElement({
           tag: 'input',
-          attrs: { checked: this.checked },
+          attrs: {
+            type: 'checkbox',
+            checked: this.checked,
+          },
         }),
         renderer.renderTextAsHtml(this.text),
       ].join(' '),
