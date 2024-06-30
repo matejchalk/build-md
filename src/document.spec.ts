@@ -109,4 +109,30 @@ describe('MarkdownDocument', () => {
         .toString()
     ).toMatchFileSnapshot('__snapshots__/extended-syntax.md');
   });
+
+  it('should not render blocks with falsy content', () => {
+    expect(
+      new MarkdownDocument()
+        .heading(1, '')
+        .paragraph(undefined)
+        .list([])
+        .code(null)
+        .table([], [])
+        .toString()
+    ).toBe('\n');
+  });
+
+  it('should be immutable by default', () => {
+    const doc1 = new MarkdownDocument().heading(1, 'Greetings');
+    const doc2 = doc1.paragraph('Hello, world!');
+    expect(doc1.toString()).not.toBe(doc2.toString());
+  });
+
+  it('should be mutable if specified', () => {
+    const doc1 = new MarkdownDocument({
+      mutable: true,
+    }).heading(1, 'Greetings');
+    const doc2 = doc1.paragraph('Hello, world!');
+    expect(doc1.toString()).toBe(doc2.toString());
+  });
 });
