@@ -36,6 +36,9 @@ describe('MarkdownDocument', () => {
         .quote(
           'TIP: If you\'re working on an open issue, referencing the issue number with "closes #123" in the PR description will automatically link it.'
         )
+        .rule()
+        .heading(2, 'Troubleshooting')
+        .paragraph('If you run into problems, try searching in Issues tab.')
         .toString()
     ).toMatchFileSnapshot('__snapshots__/basic-blocks.md');
   });

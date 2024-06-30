@@ -3,6 +3,7 @@ import { heading } from './block/heading';
 import { list } from './block/list';
 import { paragraph } from './block/paragraph';
 import { quote } from './block/quote';
+import { rule } from './block/rule';
 import { table } from './block/table';
 import { bold } from './inline/bold';
 import { code } from './inline/code';
@@ -29,6 +30,7 @@ export const md = Object.assign(mdFunction, {
   list,
   codeBlock,
   quote,
+  rule,
   table,
 });
 

@@ -30,3 +30,9 @@ yarn lint # checks for codestyle problems
 4. When ready, open a pull request to the main branch.
 
 > TIP: If you're working on an open issue, referencing the issue number with "closes #123" in the PR description will automatically link it.
+
+---
+
+## Troubleshooting
+
+If you run into problems, try searching in Issues tab.

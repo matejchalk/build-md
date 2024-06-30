@@ -66,6 +66,10 @@ export class MarkdownDocument {
     return this.#append(md.quote(text));
   }
 
+  rule(): MarkdownDocument {
+    return this.#append(md.rule());
+  }
+
   table(
     columns:
       | BlockText[]
