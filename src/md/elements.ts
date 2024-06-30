@@ -1,6 +1,6 @@
 import type { Renderer } from './renderer';
 
-interface IElement {
+export interface IElement {
   render(renderer: Renderer): string;
   renderAsHtml(renderer: Renderer): string;
   renderInline(renderer: Renderer): string;

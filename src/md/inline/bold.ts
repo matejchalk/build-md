@@ -14,16 +14,12 @@ type BoldInnerMarks =
   | LinkMark
   | StrikethroughMark;
 
-export function bold<TInnerMarks extends BoldInnerMarks>(
-  text: InlineText<TInnerMarks>
-): BoldMark<TInnerMarks> {
-  return new BoldMark<TInnerMarks>(text);
+export function bold(text: InlineText<BoldInnerMarks>): BoldMark {
+  return new BoldMark(text);
 }
 
-export class BoldMark<
-  TInnerMarks extends BoldInnerMarks = BoldInnerMarks
-> extends Mark {
-  constructor(public readonly text: InlineText<TInnerMarks>) {
+export class BoldMark extends Mark {
+  constructor(public readonly text: InlineText<BoldInnerMarks>) {
     super();
   }
 

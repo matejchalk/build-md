@@ -15,7 +15,7 @@ export class Renderer {
       blocksToRender = this.#extraBlocks;
     }
 
-    return renderedBlocks.filter(Boolean).join('\n\n');
+    return renderedBlocks.filter(Boolean).join('\n\n') + '\n';
   }
 
   renderText(text: InlineText | BlockText): string {

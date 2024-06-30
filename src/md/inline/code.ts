@@ -11,7 +11,7 @@ export class CodeMark extends Mark {
   }
 
   render(_: Renderer): string {
-    return `\`\`\`${this.text}\`\`\``;
+    return `\`${this.text}\``;
   }
 
   renderAsHtml(renderer: Renderer): string {

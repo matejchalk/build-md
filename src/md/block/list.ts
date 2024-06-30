@@ -122,8 +122,8 @@ export class OrderedListItemBlock extends Block {
 
   render(renderer: Renderer): string {
     const maxDigits = Math.floor(Math.log10(this.count || 1)) + 1;
-    const prefix = this.order.toString().padStart(maxDigits, ' ');
-    return `${prefix} ${renderer.renderText(this.text)}`;
+    const digit = this.order.toString().padStart(maxDigits, ' ');
+    return `${digit}. ${renderer.renderText(this.text)}`;
   }
 
   renderAsHtml(renderer: Renderer): string {

@@ -1,10 +1,18 @@
-import type { Block, Mark } from './elements';
+import type { IElement } from './elements';
 
-export function md<TMark extends Mark = never, TBlock extends Block = never>(
+type Items<TElement extends IElement = IElement> = (
+  | TElement
+  | (string | TElement)[]
+)[];
+type ElementOf<TItems extends Items> = TItems extends Items<infer U>
+  ? U
+  : never;
+
+export function md<TItems extends Items>(
   strings: TemplateStringsArray,
-  ...items: (TMark | TBlock | (string | TMark | TBlock)[])[]
-): (string | TMark | TBlock)[] {
-  return strings.flatMap((text, i) => {
+  ...items: TItems
+): (string | ElementOf<TItems>)[] {
+  const result: (string | IElement)[] = strings.flatMap((text, i) => {
     const item = items[i];
     if (item) {
       if (Array.isArray(item)) {
@@ -14,4 +22,5 @@ export function md<TMark extends Mark = never, TBlock extends Block = never>(
     }
     return text;
   });
+  return result as (string | ElementOf<TItems>)[];
 }
