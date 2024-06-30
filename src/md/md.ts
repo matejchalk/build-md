@@ -1,4 +1,5 @@
 import type { IElement } from './elements';
+import { Renderer } from './renderer';
 
 type Items<TElement extends IElement = IElement> = (
   | TElement
@@ -22,5 +23,11 @@ export function md<TItems extends Items>(
     }
     return text;
   });
+  result.toString = () => {
+    const renderer = new Renderer();
+    return result
+      .map(item => (typeof item === 'string' ? item : item.render(renderer)))
+      .join('');
+  };
   return result as (string | ElementOf<TItems>)[];
 }
