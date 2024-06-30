@@ -67,7 +67,9 @@ export class Renderer {
     }
 
     const text: string = Array.isArray(content)
-      ? content.map(el => this.renderHtmlElement(el)).join('')
+      ? content
+          .map(el => (typeof el === 'string' ? el : this.renderHtmlElement(el)))
+          .join('')
       : typeof content === 'object'
       ? this.renderHtmlElement(content)
       : content;
@@ -93,5 +95,5 @@ export class Renderer {
 type HtmlElement = {
   tag: string;
   attrs?: Record<string, string | boolean>;
-  content?: string | HtmlElement | HtmlElement[];
+  content?: string | HtmlElement | (string | HtmlElement)[];
 };

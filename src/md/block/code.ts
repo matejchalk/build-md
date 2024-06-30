@@ -1,7 +1,14 @@
 import { Block } from '../elements';
 import type { Renderer } from '../renderer';
 
-export function codeBlock(text: string, lang?: string): CodeBlock {
+export function codeBlock(text: string): CodeBlock;
+export function codeBlock(lang: string, text: string): CodeBlock;
+export function codeBlock(
+  langOrText: string,
+  optionalText?: string
+): CodeBlock {
+  const text = optionalText ?? langOrText;
+  const lang = optionalText ? langOrText : undefined;
   return new CodeBlock(text, lang);
 }
 

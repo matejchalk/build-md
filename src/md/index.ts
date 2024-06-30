@@ -1,4 +1,5 @@
 import { codeBlock } from './block/code';
+import { details } from './block/details';
 import { heading } from './block/heading';
 import { list } from './block/list';
 import { paragraph } from './block/paragraph';
@@ -32,6 +33,7 @@ export const md = Object.assign(mdFunction, {
   quote,
   rule,
   table,
+  details,
 });
 
 export { Renderer } from './renderer';

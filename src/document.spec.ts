@@ -18,13 +18,13 @@ describe('MarkdownDocument', () => {
         .heading(2, 'Local development')
         .paragraph('Yarn scripts are available for common tasks:')
         .code(
+          'sh',
           [
             'yarn test # executes unit tests',
             'yarn e2e # runs E2E tests',
             'yarn build # compiles source code for distribution',
             'yarn lint # checks for codestyle problems',
-          ].join('\n'),
-          'sh'
+          ].join('\n')
         )
         .heading(3, 'Working on a new feature')
         .list('ordered', [

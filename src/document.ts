@@ -56,9 +56,16 @@ export class MarkdownDocument {
     );
   }
 
-  code(text: Conditional<string>, lang?: string): MarkdownDocument {
+  code(text: Conditional<string>): MarkdownDocument;
+  code(lang: string, text: Conditional<string>): MarkdownDocument;
+  code(
+    langOrText: Conditional<string>,
+    optionalText?: Conditional<string>
+  ): MarkdownDocument {
+    const text = optionalText ?? langOrText;
+    const lang = optionalText ? langOrText : undefined;
     if (!text) return this;
-    return this.#append(md.codeBlock(text, lang));
+    return this.#append(lang ? md.codeBlock(lang, text) : md.codeBlock(text));
   }
 
   quote(text: Conditional<BlockText>): MarkdownDocument {
@@ -78,6 +85,18 @@ export class MarkdownDocument {
   ): MarkdownDocument {
     if (columns.length === 0) return this;
     return this.#append(md.table(columns, rows));
+  }
+
+  details(text: Conditional<BlockText>): MarkdownDocument;
+  details(summary: InlineText, text: Conditional<BlockText>): MarkdownDocument;
+  details(
+    summaryOrText: InlineText | Conditional<BlockText>,
+    optionalText?: Conditional<BlockText>
+  ): MarkdownDocument {
+    const text = optionalText ?? summaryOrText;
+    const summary = optionalText && summaryOrText ? summaryOrText : '';
+    if (!text) return this;
+    return this.#append(md.details(summary, text));
   }
 
   toString(): string {
