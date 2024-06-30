@@ -69,4 +69,44 @@ describe('MarkdownDocument', () => {
         .toString()
     ).toMatchFileSnapshot('__snapshots__/basic-inline.md');
   });
+
+  it('should render block and inline elements from extended syntax', () => {
+    expect(
+      new MarkdownDocument()
+        .heading(1, 'CLI')
+        .table(
+          ['Option', 'Description'],
+          [
+            [md`${md.code('-i')}, ${md.code('--input')}`, 'Input file path'],
+            [
+              md`${md.code('-o')}, ${md.code('--output')} ${md.footnote(
+                'Output format determined by file extension.'
+              )}`,
+              'Output file path',
+            ],
+            [md.code('--version'), 'Print version and exit'],
+          ]
+        )
+        .details(
+          'Examples',
+          md.list([
+            md`${md.code(
+              'gendocs --input src/index.ts'
+            )} - reads input from file and prints to stdout`,
+            md`${md.code(
+              'gendocs -i src/index.ts -o docs/API.md'
+            )} - reads input and output from file`,
+            md`${md.code('gendocs --version')} - prints installed version`,
+          ])
+        )
+        .heading(2, 'Roadmap')
+        .list('task', [
+          [true, 'Markdown output'],
+          [true, 'HTML output'],
+          [false, md`${md.strikethrough('PDF output')} (not planned)`],
+          [false, 'Custom HTML themes'],
+        ])
+        .toString()
+    ).toMatchFileSnapshot('__snapshots__/extended-syntax.md');
+  });
 });

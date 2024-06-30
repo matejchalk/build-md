@@ -22,14 +22,11 @@ export class DetailsBlock extends Block {
   }
 
   render(renderer: Renderer): string {
+    const summary = this.summary.render(renderer);
+    const details = renderer.renderText(this.text);
     return renderer.renderHtmlElement({
       tag: 'details',
-      content: [
-        this.summary.render(renderer),
-        `\n${renderer.renderText(this.text)}\n`,
-      ]
-        .filter(Boolean)
-        .join('\n'),
+      content: `\n${summary && `${summary}\n`}\n${details}\n\n`,
     });
   }
 

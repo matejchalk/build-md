@@ -12,7 +12,7 @@ export class Renderer {
     while (blocksToRender.length > 0) {
       this.#extraBlocks.length = 0;
       renderedBlocks.push(...blocksToRender.map(block => block.render(this)));
-      blocksToRender = this.#extraBlocks;
+      blocksToRender = [...this.#extraBlocks];
     }
 
     return renderedBlocks.filter(Boolean).join('\n\n') + '\n';
