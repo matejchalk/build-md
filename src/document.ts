@@ -1,12 +1,13 @@
 import {
+  Renderer,
   md,
+  type Block,
+  type BlockText,
   type HeadingLevel,
+  type InlineText,
   type ListKind,
   type TableCellAlignment,
 } from './md';
-import type { Block } from './md/elements';
-import { Renderer } from './md/renderer';
-import type { BlockText, InlineText } from './md/text';
 
 type Conditional<T> = T | null | undefined | false;
 

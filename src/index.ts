@@ -1,2 +1,2 @@
-export { MarkdownDocument } from './MarkdownDocument';
+export { MarkdownDocument } from './document';
 export { md } from './md';

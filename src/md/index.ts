@@ -32,6 +32,11 @@ export const md = Object.assign(mdFunction, {
   table,
 });
 
+export { Renderer } from './renderer';
+
+export type { Block, Mark } from './elements';
+export type { BlockText, InlineText } from './text';
+
 export type { HeadingLevel } from './block/heading';
 export type { ListKind } from './block/list';
 export type { TableCellAlignment } from './block/table';
