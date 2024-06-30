@@ -1,4 +1,4 @@
-import type { Block } from './elements';
+import { Block } from './elements';
 import type { BlockText, InlineText } from './text';
 
 export class Renderer {
@@ -35,7 +35,15 @@ export class Renderer {
     mode: 'markdown' | 'inline' | 'html'
   ): string {
     if (Array.isArray(text)) {
-      return text.map(item => this.#render(item, mode)).join('');
+      return text
+        .map((item, index) => {
+          const str = this.#render(item, mode);
+          if (mode === 'markdown' && item instanceof Block && index > 0) {
+            return `\n${str}`;
+          }
+          return str;
+        })
+        .join('');
     }
     if (typeof text === 'string') {
       return text;

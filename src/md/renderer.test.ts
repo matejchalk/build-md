@@ -60,11 +60,7 @@ describe('Renderer', () => {
 
     it('should render array with marks and blocks as markdown', () => {
       expect(
-        new Renderer().renderText([
-          'item 1',
-          '\n',
-          list(['item 1.1', 'item 1.2']),
-        ])
+        new Renderer().renderText(['item 1', list(['item 1.1', 'item 1.2'])])
       ).toBe('item 1\n- item 1.1\n- item 1.2');
     });
   });
