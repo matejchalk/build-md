@@ -18,8 +18,11 @@ export class Renderer {
     return renderedBlocks.filter(Boolean).join('\n\n') + '\n';
   }
 
-  renderText(text: InlineText | BlockText): string {
-    return this.#render(text, 'markdown');
+  renderText(
+    text: InlineText | BlockText,
+    options?: RenderMarkdownOptions
+  ): string {
+    return this.#render(text, 'markdown', options);
   }
 
   renderTextAsHtml(text: InlineText | BlockText): string {
@@ -32,14 +35,22 @@ export class Renderer {
 
   #render(
     text: InlineText | BlockText,
-    mode: 'markdown' | 'inline' | 'html'
+    mode: 'markdown' | 'inline' | 'html',
+    options?: RenderMarkdownOptions
   ): string {
+    const indent = options?.indentation ? ' '.repeat(options.indentation) : '';
+
     if (Array.isArray(text)) {
       return text
         .map((item, index) => {
-          const str = this.#render(item, mode);
+          const str = this.#render(item, mode, options);
           if (mode === 'markdown' && item instanceof Block && index > 0) {
-            return `\n\n${str}`;
+            if (
+              options?.attachableBlocks?.some(block => item instanceof block)
+            ) {
+              return `\n${indent}${str}`;
+            }
+            return `\n\n${indent}${str}`;
           }
           return str;
         })
@@ -51,9 +62,18 @@ export class Renderer {
 
     switch (mode) {
       case 'markdown':
-        return text.render(this);
+        const str = text.render(this);
+        if (indent) {
+          return str
+            .split('\n')
+            .map((line, index) => (index > 0 ? `${indent}${line}` : line))
+            .join('\n');
+        }
+        return str;
+
       case 'html':
         return text.renderAsHtml(this);
+
       case 'inline':
         return text.renderInline(this);
     }
@@ -99,6 +119,11 @@ export class Renderer {
     return this.#extraBlocks;
   }
 }
+
+type RenderMarkdownOptions = {
+  attachableBlocks?: { new (...args: any[]): any }[];
+  indentation?: number;
+};
 
 type HtmlElement = {
   tag: string;

@@ -83,7 +83,10 @@ export class UnorderedListItemBlock extends Block {
   }
 
   render(renderer: Renderer): string {
-    return `- ${renderer.renderText(this.text)}`;
+    return `- ${renderer.renderText(this.text, {
+      attachableBlocks: ATTACHABLE_BLOCKS,
+      indentation: 2,
+    })}`;
   }
 
   renderAsHtml(renderer: Renderer): string {
@@ -123,7 +126,10 @@ export class OrderedListItemBlock extends Block {
   render(renderer: Renderer): string {
     const maxDigits = Math.floor(Math.log10(this.count || 1)) + 1;
     const digit = this.order.toString().padStart(maxDigits, ' ');
-    return `${digit}. ${renderer.renderText(this.text)}`;
+    return `${digit}. ${renderer.renderText(this.text, {
+      attachableBlocks: ATTACHABLE_BLOCKS,
+      indentation: maxDigits + 2,
+    })}`;
   }
 
   renderAsHtml(renderer: Renderer): string {
@@ -160,7 +166,10 @@ export class TaskListItemBlock extends Block {
   }
 
   render(renderer: Renderer): string {
-    return `- [${this.checked ? 'x' : ' '}] ${renderer.renderText(this.text)}`;
+    return `- [${this.checked ? 'x' : ' '}] ${renderer.renderText(this.text, {
+      attachableBlocks: ATTACHABLE_BLOCKS,
+      indentation: 2,
+    })}`;
   }
 
   renderAsHtml(renderer: Renderer): string {
@@ -179,3 +188,5 @@ export class TaskListItemBlock extends Block {
     });
   }
 }
+
+const ATTACHABLE_BLOCKS = [UnorderedListBlock, OrderedListBlock, TaskListBlock];

@@ -32,15 +32,8 @@ class FootnoteBlock extends Block {
   }
 
   render(renderer: Renderer): string {
-    const text = renderer.renderText(this.text);
-    const prefix = `[^${this.label}]:`;
-    const indentedText = text
-      .split('\n')
-      .map((line, index) =>
-        index > 0 && line ? `${' '.repeat(4)}${line}` : line
-      )
-      .join('\n');
-    return `${prefix} ${indentedText}`;
+    const text = renderer.renderText(this.text, { indentation: 4 });
+    return `[^${this.label}]: ${text}`;
   }
 
   renderAsHtml(renderer: Renderer): string {
