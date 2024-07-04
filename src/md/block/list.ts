@@ -43,7 +43,7 @@ export function list(
       return new OrderedListBlock(
         items.map(
           (item, index) =>
-            new OrderedListItemBlock(extractText(item), index + 1, items.length)
+            new OrderedListItemBlock(extractText(item), index + 1)
         )
       );
 
@@ -60,15 +60,26 @@ export function list(
   }
 }
 
-export class UnorderedListBlock extends Block {
-  constructor(public readonly items: UnorderedListItemBlock[]) {
+abstract class ListBlock<TItemBlock extends Block> extends Block {
+  constructor(public readonly items: TItemBlock[]) {
     super();
   }
 
   render(renderer: Renderer): string {
-    return this.items.map(item => item.render(renderer)).join('\n');
+    return this.items
+      .map((item, index, array) => {
+        const isLast = index === array.length - 1;
+        const str = item.render(renderer);
+        if (str.split('\n')[1] === '' && !isLast) {
+          return `${str}\n`;
+        }
+        return str;
+      })
+      .join('\n');
   }
+}
 
+export class UnorderedListBlock extends ListBlock<UnorderedListItemBlock> {
   renderAsHtml(renderer: Renderer): string {
     return renderer.renderHtmlElement({
       tag: 'ul',
@@ -97,15 +108,7 @@ export class UnorderedListItemBlock extends Block {
   }
 }
 
-export class OrderedListBlock extends Block {
-  constructor(public readonly items: OrderedListItemBlock[]) {
-    super();
-  }
-
-  render(renderer: Renderer): string {
-    return this.items.map(item => item.render(renderer)).join('\n');
-  }
-
+export class OrderedListBlock extends ListBlock<OrderedListItemBlock> {
   renderAsHtml(renderer: Renderer): string {
     return renderer.renderHtmlElement({
       tag: 'ol',
@@ -115,20 +118,14 @@ export class OrderedListBlock extends Block {
 }
 
 export class OrderedListItemBlock extends Block {
-  constructor(
-    public readonly text: BlockText,
-    public readonly order: number,
-    public readonly count: number
-  ) {
+  constructor(public readonly text: BlockText, public readonly order: number) {
     super();
   }
 
   render(renderer: Renderer): string {
-    const maxDigits = Math.floor(Math.log10(this.count || 1)) + 1;
-    const digit = this.order.toString().padStart(maxDigits, ' ');
-    return `${digit}. ${renderer.renderText(this.text, {
+    return `${this.order}. ${renderer.renderText(this.text, {
       attachableBlocks: ATTACHABLE_BLOCKS,
-      indentation: maxDigits + 2,
+      indentation: this.order.toString().length + 2,
     })}`;
   }
 
@@ -140,15 +137,7 @@ export class OrderedListItemBlock extends Block {
   }
 }
 
-export class TaskListBlock extends Block {
-  constructor(public readonly items: TaskListItemBlock[]) {
-    super();
-  }
-
-  render(renderer: Renderer): string {
-    return this.items.map(item => item.render(renderer)).join('\n');
-  }
-
+export class TaskListBlock extends ListBlock<TaskListItemBlock> {
   renderAsHtml(renderer: Renderer): string {
     return renderer.renderHtmlElement({
       tag: 'ul',
