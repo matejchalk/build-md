@@ -39,7 +39,7 @@ export class Renderer {
         .map((item, index) => {
           const str = this.#render(item, mode);
           if (mode === 'markdown' && item instanceof Block && index > 0) {
-            return `\n${str}`;
+            return `\n\n${str}`;
           }
           return str;
         })

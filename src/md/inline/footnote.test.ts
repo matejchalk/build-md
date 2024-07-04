@@ -1,5 +1,7 @@
+import { list } from '../block/list';
 import { Renderer } from '../renderer';
 import { footnote } from './footnote';
+import { link } from './link';
 
 describe('footnote', () => {
   it('should render footnote link', () => {
@@ -37,6 +39,34 @@ describe('footnote', () => {
     );
     expect(renderer.extraBlocks[1]!.render(renderer)).toBe(
       '[^2]: Semantic versioning'
+    );
+  });
+
+  it('should render content with inline formatting', () => {
+    const renderer = new Renderer();
+    footnote([
+      'For more info, refer to ',
+      link('https://zod.dev', 'Zod docs'),
+    ]).render(renderer);
+    expect(renderer.extraBlocks[0]!.render(renderer)).toBe(
+      '[^1]: For more info, refer to [Zod docs](https://zod.dev)'
+    );
+  });
+
+  it('should render content with block formatting', () => {
+    const renderer = new Renderer();
+    footnote([
+      'The following output formats are supported:',
+      list(['Markdown', 'HTML', 'PDF']),
+    ]).render(renderer);
+    expect(renderer.extraBlocks[0]!.render(renderer)).toBe(
+      `
+[^1]: The following output formats are supported:
+
+    - Markdown
+    - HTML
+    - PDF
+`.trim()
     );
   });
 });
