@@ -1,4 +1,5 @@
 import { Renderer } from '../renderer';
+import { image } from './image';
 import { link } from './link';
 
 describe('link', () => {
@@ -24,6 +25,15 @@ describe('link', () => {
     ).toBe('[guide](https://www.markdownguide.org/ "Markdown Guide")');
   });
 
+  it('should wrap other marks', () => {
+    expect(
+      link(
+        'https://example.com',
+        image('https://example.com/logo.png', 'Example')
+      ).render(renderer)
+    ).toBe('[![Example](https://example.com/logo.png)](https://example.com)');
+  });
+
   it('should render href and title as html anchor', () => {
     expect(
       link('https://www.markdownguide.org/', 'Markdown Guide').renderAsHtml(
@@ -32,7 +42,7 @@ describe('link', () => {
     ).toBe('<a href="https://www.markdownguide.org/">Markdown Guide</a>');
   });
 
-  it('should render reuse URL instead of missing text in html anchor', () => {
+  it('should reuse URL if missing text in html anchor', () => {
     expect(link('https://www.markdownguide.org/').renderAsHtml(renderer)).toBe(
       '<a href="https://www.markdownguide.org/">https://www.markdownguide.org/</a>'
     );
