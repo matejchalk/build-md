@@ -1,2 +1,3 @@
-# markdown-formatter
-Markdown string builder for JS/TS
+# build-md
+
+**Builder to dynamically create well-formatted Markdown strings in JS/TS.**

@@ -1,7 +1,7 @@
 {
-  "name": "markdown-formatter",
+  "name": "build-md",
   "version": "0.0.0",
-  "description": "Markdown string builder",
+  "description": "Builder to dynamically create well-formatted Markdown strings in JS/TS",
   "license": "MIT",
   "author": "Matěj Chalk <matejchalk@gmail.com>",
   "keywords": [
@@ -11,11 +11,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/matejchalk/markdown-formatter.git"
+    "url": "git+ssh://git@github.com/matejchalk/build-md.git"
   },
-  "homepage": "https://github.com/matejchalk/markdown-formatter#readme",
+  "homepage": "https://github.com/matejchalk/build-md#readme",
   "bugs": {
-    "url": "https://github.com/matejchalk/markdown-formatter/issues"
+    "url": "https://github.com/matejchalk/build-md/issues"
   },
   "type": "module",
   "files": [
