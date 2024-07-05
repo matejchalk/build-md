@@ -39,6 +39,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
+    "@types/node": "^20.14.9",
     "@vitest/coverage-v8": "^1.6.0",
     "tsup": "^8.0.2",
     "typescript": "^5.5.2",
