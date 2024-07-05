@@ -17,12 +17,22 @@ describe('link', () => {
     );
   });
 
-  it('should render link with text as markdown', () => {
+  it('should render link with text and title as markdown', () => {
     expect(
       link('https://www.markdownguide.org/', 'guide', 'Markdown Guide').render(
         renderer
       )
     ).toBe('[guide](https://www.markdownguide.org/ "Markdown Guide")');
+  });
+
+  it('should render link with title but no text as markdown', () => {
+    expect(
+      link('https://www.markdownguide.org/', '', 'Markdown Guide').render(
+        renderer
+      )
+    ).toBe(
+      '[https://www.markdownguide.org/](https://www.markdownguide.org/ "Markdown Guide")'
+    );
   });
 
   it('should wrap other marks', () => {

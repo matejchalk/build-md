@@ -15,28 +15,48 @@ export class FootnoteMark extends Mark {
   }
 
   render(renderer: Renderer): string {
-    const label =
-      this.label || renderer.incrementCounter('footnotes').toString();
-    renderer.appendBlock(new FootnoteBlock(this.text, label));
+    const label = this.#getLabel(renderer);
+    renderer.appendBlock(new FootnoteBlock(this.text, label, false));
     return `[^${label}]`;
   }
 
   renderAsHtml(renderer: Renderer): string {
-    return this.render(renderer);
+    const label = this.#getLabel(renderer);
+    renderer.appendBlock(new FootnoteBlock(this.text, label, true));
+    return renderer.renderHtmlElement({
+      tag: 'a',
+      attrs: { href: `#footnote-${label}` },
+      content: `[${label}]`,
+    });
+  }
+
+  #getLabel(renderer: Renderer): string {
+    return this.label || renderer.incrementCounter('footnotes').toString();
   }
 }
 
 class FootnoteBlock extends Block {
-  constructor(public readonly text: InlineText, public readonly label: string) {
+  constructor(
+    public readonly text: InlineText,
+    public readonly label: string,
+    public readonly isHtml: boolean
+  ) {
     super();
   }
 
   render(renderer: Renderer): string {
-    const text = renderer.renderText(this.text, { indentation: 4 });
-    return `[^${this.label}]: ${text}`;
+    if (this.isHtml) {
+      return this.renderAsHtml(renderer);
+    }
+    const content = renderer.renderText(this.text, { indentation: 4 });
+    return `[^${this.label}]: ${content}`;
   }
 
   renderAsHtml(renderer: Renderer): string {
-    return this.render(renderer);
+    return renderer.renderHtmlElement({
+      tag: 'p',
+      attrs: { id: `footnote-${this.label}` },
+      content: `[${this.label}] ${renderer.renderTextAsHtml(this.text)}`,
+    });
   }
 }

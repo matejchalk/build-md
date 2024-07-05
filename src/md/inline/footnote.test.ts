@@ -69,4 +69,14 @@ describe('footnote', () => {
 `.trim()
     );
   });
+
+  it('should render using anchor tag and id attribute in html', () => {
+    const renderer = new Renderer();
+    expect(footnote('Lorem ipsum ...').renderAsHtml(renderer)).toBe(
+      '<a href="#footnote-1">[1]</a>'
+    );
+    expect(renderer.extraBlocks[0]?.render(renderer)).toBe(
+      '<p id="footnote-1">[1] Lorem ipsum ...</p>'
+    );
+  });
 });
