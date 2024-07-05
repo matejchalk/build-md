@@ -15,7 +15,7 @@ export class QuoteBlock extends Block {
     const text = renderer.renderText(this.text);
     return text
       .split('\n')
-      .map(line => `> ${line}`)
+      .map(line => (line ? `> ${line}` : '>'))
       .join('\n');
   }
 
