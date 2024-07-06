@@ -96,7 +96,7 @@ export class UnorderedListBlock extends ListBlock<UnorderedListItemBlock> {
   }
 }
 
-export class UnorderedListItemBlock extends ListItemBlock {
+class UnorderedListItemBlock extends ListItemBlock {
   constructor(public readonly text: BlockText) {
     super();
   }
@@ -125,7 +125,7 @@ export class OrderedListBlock extends ListBlock<OrderedListItemBlock> {
   }
 }
 
-export class OrderedListItemBlock extends ListItemBlock {
+class OrderedListItemBlock extends ListItemBlock {
   constructor(public readonly text: BlockText, public readonly order: number) {
     super();
   }
@@ -154,7 +154,7 @@ export class TaskListBlock extends ListBlock<TaskListItemBlock> {
   }
 }
 
-export class TaskListItemBlock extends ListItemBlock {
+class TaskListItemBlock extends ListItemBlock {
   constructor(
     public readonly text: BlockText,
     public readonly checked: boolean

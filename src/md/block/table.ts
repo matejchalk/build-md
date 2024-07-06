@@ -68,7 +68,7 @@ export class TableBlock extends Block {
   }
 }
 
-export class TableColumnBlock extends Block {
+class TableColumnBlock extends Block {
   constructor(
     public readonly heading: BlockText,
     public readonly alignment?: TableCellAlignment
@@ -90,7 +90,7 @@ export class TableColumnBlock extends Block {
   }
 }
 
-export class TableRowBlock extends Block {
+class TableRowBlock extends Block {
   constructor(public readonly cells: BlockText[]) {
     super();
   }

@@ -41,7 +41,7 @@ export class DetailsBlock extends Block {
   }
 }
 
-export class SummaryBlock extends Block {
+class SummaryBlock extends Block {
   constructor(public readonly text: InlineText) {
     super();
   }
