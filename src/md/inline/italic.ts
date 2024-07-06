@@ -14,6 +14,17 @@ type ItalicInnerMarks =
   | LinkMark
   | StrikethroughMark;
 
+/**
+ * Creates **italic** text.
+ *
+ * @example
+ * italic('emphasize this')
+ * @example
+ * italic(md`emphasize this with ${bold('extra formatting')}`)
+ *
+ * @param text plain string or text with inline formatting
+ * @returns italic mark
+ */
 export function italic(text: InlineText<ItalicInnerMarks>): ItalicMark {
   return new ItalicMark(text);
 }

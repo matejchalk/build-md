@@ -9,6 +9,18 @@ type ElementOf<TItems extends Items> = TItems extends Items<infer U>
   ? U
   : never;
 
+/**
+ * Creates formatted markdown text, called using tagged template literal syntax.
+ *
+ * @example
+ * md`text with ${bold('formatting')}`
+ * @example
+ * md`${bold('nested')} expressions ${md`also ${italic('work')}`}`
+ *
+ * @param strings plain strings
+ * @param items formatting elements
+ * @returns strings and elements in order
+ */
 export function md<TItems extends Items>(
   strings: TemplateStringsArray,
   ...items: TItems

@@ -2,6 +2,24 @@ import { Block, Mark } from '../elements';
 import type { Renderer } from '../renderer';
 import type { InlineText } from '../text';
 
+/**
+ * Creates **footnote** label and registers content to be appended to document.
+ *
+ * Footnotes allow you to add notes and references without cluttering the body of the document.
+ * When you create a footnote, a superscript number with a link appears where you added the footnote reference.
+ * Readers can click the link to jump to the content of the footnote at the bottom of the page.
+ *
+ * @example
+ * foonote('more info')
+ * @example
+ * footnote(md`more info with ${bold('extra formatting')}`)
+ * @example
+ * foonote('more info', 'customLabel')
+ *
+ * @param text plain string or text with inline formatting
+ * @param label custom label for footnote link (default is auto-incremented number)
+ * @returns footnote mark
+ */
 export function footnote(text: InlineText, label?: string): FootnoteMark {
   return new FootnoteMark(text, label);
 }

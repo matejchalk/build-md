@@ -9,16 +9,29 @@ import {
   type TableCellAlignment,
 } from './md';
 
+/** Content which may include falsy value from conditional expression, in which case document block should be skipped. */
 type Conditional<T> = T | null | undefined | false;
 
+/** Options for customizing {@link MarkdownDocument} behaviour. */
 type MarkdownDocumentOptions = {
+  /** Should methods calls modify the original {@link MarkdownDocument} instance (`true`), or return a new instance (`false` by default). */
   mutable?: boolean;
 };
 
+/**
+ * Builder for Markdown documents.
+ *
+ * @see {@link md} for creating inline Markdown texts
+ */
 export class MarkdownDocument {
   #options: Required<MarkdownDocumentOptions>;
   #blocks: Block[] = [];
 
+  /**
+   * Creates instance for building a Markdown document.
+   *
+   * @param options Customization options (e.g. mutability).
+   */
   constructor(options?: MarkdownDocumentOptions) {
     this.#options = {
       mutable: false,
@@ -26,6 +39,19 @@ export class MarkdownDocument {
     };
   }
 
+  /**
+   * Adds **heading** to document (unless empty).
+   *
+   * @example
+   * new MarkdownDocument()
+   *   .heading(1, 'Top-level heading')
+   *   .heading(2, md`Sub-heading with ${code('inline formatting')}`)
+   *
+   * @param level heading level
+   * @param text plain string or text with inline formatting
+   * @returns document with additional heading block
+   * @see {@link md.heading}
+   */
   heading(
     level: HeadingLevel,
     text: Conditional<InlineText>
@@ -34,15 +60,104 @@ export class MarkdownDocument {
     return this.#append(md.heading(level, text));
   }
 
+  /**
+   * Adds **paragraph** to document (unless empty).
+   *
+   * @example
+   * new MarkdownDocument()
+   *   .paragraph('Some text content.')
+   *   .paragraph(md`Some text content with ${bold('formatting')}.`)
+   *
+   * @param text plain string or text with inline or block formatting
+   * @returns document with additional paragraph block
+   * @see {@link md.paragraph}
+   */
   paragraph(text: Conditional<BlockText>): MarkdownDocument {
     if (!text) return this;
     return this.#append(md.paragraph(text));
   }
 
+  /**
+   * Adds **unordered list** to document (unless empty).
+   *
+   * @example
+   * new MarkdownDocument()
+   *   .list(['first item', 'second item'])
+   *   .list([
+   *     md`first item with ${italic('text formatting')}`,
+   *     md`second item with nested list:${md.list([
+   *      "second item's first item",
+   *      "second item's second item"
+   *     ])}`
+   *   ])
+   *
+   * @param items array of items, each of which may contain block or inline formatting
+   * @returns document with additional unordered list block
+   * @see {@link md.list}
+   */
   list(items: BlockText[]): MarkdownDocument;
+
+  /**
+   * Adds **unordered list** to document (unless empty).
+   *
+   * @example
+   * new MarkdownDocument()
+   *   .list('unordered', ['first item', 'second item'])
+   *   .list('unordered', [
+   *     md`first item with ${italic('text formatting')}`,
+   *     md`second item with nested list:${md.list('unordered', [
+   *      "second item's first item",
+   *      "second item's second item"
+   *     ])}`
+   *   ])
+   *
+   * @param kind type of list (may be ommitted since `'unordered'` is the default)
+   * @param items array of items, each of which may contain block or inline formatting
+   * @returns document with additional unordered list block
+   * @see {@link md.list}
+   */
   list(kind: 'unordered', items: BlockText[]): MarkdownDocument;
+
+  /**
+   * Adds **ordered list** to document (unless empty).
+   *
+   * @example
+   * new MarkdownDocument()
+   *   .list('ordered', ['first item', 'second item'])
+   *   .list('ordered', [
+   *     md`first item with ${italic('text formatting')}`,
+   *     md`second item with nested list:${md.list('ordered', [
+   *      "second item's first item",
+   *      "second item's second item"
+   *     ])}`
+   *   ])
+   *
+   * @param kind type of list
+   * @param items array of items, each of which may contain block or inline formatting
+   * @returns document with additional ordered list block
+   * @see {@link md.list}
+   */
   list(kind: 'ordered', items: BlockText[]): MarkdownDocument;
+
+  /**
+   * Adds **task list** to document (unless empty). Also known as _checklist_ or _todo_ list.
+   *
+   * Part of extended Markdown syntax, not supported by all Markdown processors.
+   *
+   * @example
+   * new MarkdownDocument().list('task', [
+   *   [true, 'first task is done'],
+   *   [false, 'second task is done']
+   * ])
+   *
+   * @param kind type of list
+   * @param items array of items, each of which is a tuple of checked state and text (plain or with formatting)
+   * @returns document with additional task list block
+   * @see {@link md.list}
+   */
   list(kind: 'task', items: [boolean, BlockText][]): MarkdownDocument;
+
+  /** @ignore */
   list(
     kindOrItems: ListKind | (BlockText | [boolean, BlockText])[],
     optionalItems?: (BlockText | [boolean, BlockText])[]
@@ -56,8 +171,34 @@ export class MarkdownDocument {
     );
   }
 
+  /**
+   * Adds **code** block to document (unless empty), without any syntax highlighting.
+   *
+   * @example
+   * new MarkdownDocument().code('npm install build-md')
+   *
+   * @param text source as plain string (may be multiline)
+   * @returns document with additional code block
+   * @see {@link md.code}
+   */
   code(text: Conditional<string>): MarkdownDocument;
+
+  /**
+   * Adds **code** block to document (unless empty), with syntax highlighting.
+   *
+   * @example
+   * new MarkdownDocument().code('ts', `function greet(name: string): void {
+   *   console.log('Hello, ' + name + '!');
+   * }`)
+   *
+   * @param lang programming language for syntax highlighting
+   * @param text source as plain string (may be multiline)
+   * @returns document with additional code block
+   * @see {@link md.code}
+   */
   code(lang: string, text: Conditional<string>): MarkdownDocument;
+
+  /** @ignore */
   code(
     langOrText: Conditional<string>,
     optionalText?: Conditional<string>
@@ -68,15 +209,69 @@ export class MarkdownDocument {
     return this.#append(lang ? md.codeBlock(lang, text) : md.codeBlock(text));
   }
 
+  /**
+   * Adds **quote** block to document (unless empty).
+   *
+   * @example
+   * new MarkdownDocument()
+   *   .quote('Some quoted text.')
+   *   .quote(md`Some quoted text with ${bold('formatting')}.`)
+   *
+   * @param text plain string or text with inline or block formatting
+   * @returns document with additional quote block
+   * @see {@link md.quote}
+   */
   quote(text: Conditional<BlockText>): MarkdownDocument {
     if (!text) return this;
     return this.#append(md.quote(text));
   }
 
+  /**
+   * Adds **horizontal rule** to document.
+   *
+   * @example
+   * new MarkdownDocument().rule()
+   *
+   * @returns document with additional rule block
+   * @see {@link md.rule}
+   */
   rule(): MarkdownDocument {
     return this.#append(md.rule());
   }
 
+  /**
+   * Adds **table** to document (unless no columns).
+   *
+   * Part of extended Markdown syntax, not supported by all Markdown processors.
+   *
+   * @example
+   * new MarkdownDocument().table(['x', 'y'], [['0', '0'], ['5', '20']])
+   * @example
+   * new MarkdownDocument().table(
+   *   [
+   *     { heading: 'Error', alignment: 'left' },
+   *     { heading: link('./environments.md', 'Environment'), alignment: 'center' },
+   *     { heading: 'Occurrences', alignment: 'right' },
+   *   ],
+   *   [
+   *     [
+   *       code("TypeError: Cannot read properties of undefined (reading 'push')"),
+   *       'production',
+   *       '19',
+   *     ],
+   *     [
+   *       code("TypeError: Cannot read properties of null (reading '0')"),
+   *       'staging',
+   *       '5',
+   *     ],
+   *   ]
+   * )
+   *
+   * @param columns table header - column heading texts with optional column alignments
+   * @param rows table body - rows with text content for column cells
+   * @returns document with additional table block
+   * @see {@link md.table}
+   */
   table(
     columns:
       | BlockText[]
@@ -87,8 +282,43 @@ export class MarkdownDocument {
     return this.#append(md.table(columns, rows));
   }
 
+  /**
+   * Adds expandable **details** element (unless empty) to document, without custom summary text.
+   *
+   * Not part of Markdown syntax, relies on support for HTML rendering.
+   *
+   * @example
+   * new MarkdownDocument()
+   *   .details('text hidden until expanded')
+   *   .details(md`text with ${bold('inline')} and ${list(['block'])} elements.`)
+   *
+   * @param text plain string or text with inline or block formatting
+   * @returns document with additional details block
+   * @see {@link md.details}
+   */
   details(text: Conditional<BlockText>): MarkdownDocument;
+
+  /**
+   * Adds expandable **details** element (unless empty) to document, with custom **summary** text.
+   *
+   * Not part of Markdown syntax, relies on support for HTML rendering.
+   *
+   * @example
+   * new MarkdownDocument()
+   *   .details('summary text always shown', 'text hidden until expanded')
+   *   .details(
+   *     md`summary text with ${italic('inline')} formatting`,
+   *     md`text with ${bold('inline')} and ${list(['block'])} elements.`
+   *   )
+   *
+   * @param summary plain string or text with inline formatting
+   * @param text plain string or text with inline or block formatting
+   * @returns document with additional details block
+   * @see {@link md.details} method
+   */
   details(summary: InlineText, text: Conditional<BlockText>): MarkdownDocument;
+
+  /** @ignore */
   details(
     summaryOrText: InlineText | Conditional<BlockText>,
     optionalText?: Conditional<BlockText>
@@ -99,6 +329,11 @@ export class MarkdownDocument {
     return this.#append(md.details(summary, text));
   }
 
+  /**
+   * Renders document to Markdown.
+   *
+   * @returns Markdown string
+   */
   toString(): string {
     return new Renderer().renderDocument(this.#blocks);
   }

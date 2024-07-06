@@ -1,9 +1,43 @@
+import type { MarkdownDocument } from '../../document';
 import { Block } from '../elements';
 import type { Renderer } from '../renderer';
 import type { BlockText } from '../text';
 
 export type TableCellAlignment = 'left' | 'center' | 'right';
 
+/**
+ * Creates **table**.
+ *
+ * Part of extended Markdown syntax, not supported by all Markdown processors.
+ *
+ * @example
+ * table(['x', 'y'], [['0', '0'], ['5', '20']])
+ * @example
+ * table(
+ *   [
+ *     { heading: 'Error', alignment: 'left' },
+ *     { heading: link('./environments.md', 'Environment'), alignment: 'center' },
+ *     { heading: 'Occurrences', alignment: 'right' },
+ *   ],
+ *   [
+ *     [
+ *       code("TypeError: Cannot read properties of undefined (reading 'push')"),
+ *       'production',
+ *       '19',
+ *     ],
+ *     [
+ *       code("TypeError: Cannot read properties of null (reading '0')"),
+ *       'staging',
+ *       '5',
+ *     ],
+ *   ]
+ * )
+ *
+ * @param columns table header - column heading texts with optional column alignments
+ * @param rows table body - rows with text content for column cells
+ * @returns table block
+ * @see {@link MarkdownDocument.table}
+ */
 export function table(
   columns: (
     | BlockText

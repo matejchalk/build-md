@@ -1,9 +1,43 @@
+import type { MarkdownDocument } from '../../document';
 import { Block } from '../elements';
 import type { Renderer } from '../renderer';
 import type { BlockText, InlineText } from '../text';
 
+/**
+ * Creates expandable **details** element, without custom summary text.
+ *
+ * Not part of Markdown syntax, relies on support for HTML rendering.
+ *
+ * @example
+ * details('text hidden until expanded')
+ * @example
+ * details(md`text with ${bold('inline')} and ${list(['block'])} elements.`)
+ *
+ * @param text plain string or text with inline or block formatting
+ * @returns details block
+ * @see {@link MarkdownDocument.details}
+ */
 export function details(text: BlockText): DetailsBlock;
+
+/**
+ * Creates expandable **details** element with custom **summary** text.
+ *
+ * Not part of Markdown syntax, relies on support for HTML rendering.
+ *
+ * @example
+ * details('summary text always shown', 'text hidden until expanded')
+ * details(
+ *   md`summary text with ${italic('inline')} formatting`,
+ *   md`text with ${bold('inline')} and ${list(['block'])} elements.`
+ * )
+ *
+ * @param summary plain string or text with inline formatting
+ * @param text plain string or text with inline or block formatting
+ * @returns details block
+ * @see {@link MarkdownDocument.details} method
+ */
 export function details(summary: InlineText, text: BlockText): DetailsBlock;
+
 export function details(
   summaryOrText: InlineText | BlockText,
   optionalText?: BlockText

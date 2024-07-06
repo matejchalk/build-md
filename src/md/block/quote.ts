@@ -2,6 +2,18 @@ import { Block } from '../elements';
 import type { Renderer } from '../renderer';
 import type { BlockText } from '../text';
 
+/**
+ * Creates **quote** block.
+ *
+ * @example
+ * quote('Some quoted text.')
+ * @example
+ * quote(md`Some quoted text with ${bold('formatting')}.`)
+ *
+ * @param text plain string or text with inline or block formatting
+ * @returns quote block
+ * @see {@link MarkdownDocument.quote}
+ */
 export function quote(text: BlockText): QuoteBlock {
   return new QuoteBlock(text);
 }

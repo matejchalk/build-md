@@ -14,6 +14,21 @@ type LinkInnerMarks =
   | ImageMark
   | StrikethroughMark;
 
+/**
+ * Creates **link** element.
+ *
+ * @example
+ * link('https://www.markdownguide.org/')
+ * @example
+ * link('https://www.markdownguide.org/', 'Markdown Guide')
+ * @example
+ * link('https://www.markdownguide.org/', 'this guide', 'Markdown Guide')
+ *
+ * @param href link URL
+ * @param text display text for link (defaults to URL)
+ * @param title tooltip when hovering over the link
+ * @returns link mark
+ */
 export function link(
   href: string,
   text?: InlineText<LinkInnerMarks>,

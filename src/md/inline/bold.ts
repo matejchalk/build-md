@@ -14,6 +14,17 @@ type BoldInnerMarks =
   | LinkMark
   | StrikethroughMark;
 
+/**
+ * Creates **bold** text.
+ *
+ * @example
+ * bold('this is important')
+ * @example
+ * bold(md`important text with ${italic('extra formatting')}`)
+ *
+ * @param text plain string or text with inline formatting
+ * @returns bold mark
+ */
 export function bold(text: InlineText<BoldInnerMarks>): BoldMark {
   return new BoldMark(text);
 }

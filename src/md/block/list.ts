@@ -1,18 +1,89 @@
+import type { MarkdownDocument } from '../../document';
 import { Block } from '../elements';
 import type { Renderer, RenderMarkdownOptions } from '../renderer';
 import type { BlockText } from '../text';
 
+/** Type of list */
 export type ListKind = 'unordered' | 'ordered' | 'task';
 
 type ListItemInput = BlockText | TaskListItemInput;
 type TaskListItemInput = [boolean, BlockText];
 
+/**
+ * Creates **unordered list**.
+ *
+ * @example
+ * list(['first item', 'second item'])
+ * @example
+ * list([
+ *   md`first item with ${italic('text formatting')}`,
+ *   md`second item with nested list:${list([
+ *    "second item's first item",
+ *    "second item's second item"
+ *   ])}`
+ * ])
+ *
+ * @param items array of items, each of which may contain block or inline formatting
+ * @returns unordered list block
+ * @see {@link MarkdownDocument.list}
+ */
 export function list(items: BlockText[]): UnorderedListBlock;
 
+/**
+ * Creates **unordered list**.
+ *
+ * @example
+ * list('unordered' ['first item', 'second item'])
+ * @example
+ * list('unordered', [
+ *   md`first item with ${italic('text formatting')}`,
+ *   md`second item with nested list:${list('unordered', [
+ *    "second item's first item",
+ *    "second item's second item"
+ *   ])}`
+ * ])
+ *
+ * @param kind type of list (may be ommitted since `'unordered'` is the default)
+ * @param items array of items, each of which may contain block or inline formatting
+ * @returns unordered list block
+ * @see {@link MarkdownDocument.list}
+ */
 export function list(kind: 'unordered', items: BlockText[]): UnorderedListBlock;
 
+/**
+ * Creates **ordered list**.
+ *
+ * @example
+ * list('ordered' ['first item', 'second item'])
+ * @example
+ * list('ordered', [
+ *   md`first item with ${italic('text formatting')}`,
+ *   md`second item with nested list:${list('ordered', [
+ *    "second item's first item",
+ *    "second item's second item"
+ *   ])}`
+ * ])
+ *
+ * @param kind type of list
+ * @param items array of items (without numbers), each of which may contain block or inline formatting
+ * @returns ordered list block
+ * @see {@link MarkdownDocument.list}
+ */
 export function list(kind: 'ordered', items: BlockText[]): OrderedListBlock;
 
+/**
+ * Creates **task list** (also known as _checklist_ or _todo_ list).
+ *
+ * Part of extended Markdown syntax, not supported by all Markdown processors.
+ *
+ * @example
+ * list('task', [[true, 'first task is done'], [false, 'second task is done']])
+ *
+ * @param kind type of list
+ * @param items array of items, each of which is a tuple of checked state and text (plain or with formatting)
+ * @returns task list block
+ * @see {@link MarkdownDocument.list}
+ */
 export function list(
   kind: 'task',
   items: [boolean, BlockText][]

@@ -14,6 +14,17 @@ type StrikethroughInnerMarks =
   | ItalicMark
   | LinkMark;
 
+/**
+ * Creates **strikethrough** text - rendered with horizontal line through the middle.
+ *
+ * @example
+ * strikethrough('cross this out')
+ * @example
+ * strikethrough(md`cross out this text with ${italic('extra formatting')}`)
+ *
+ * @param text plain string or text with inline formatting
+ * @returns strikethrough mark
+ */
 export function strikethrough(
   text: InlineText<StrikethroughInnerMarks>
 ): StrikethroughMark {

@@ -16,6 +16,7 @@ import { strikethrough } from './inline/strikethrough';
 
 import { md as mdFunction } from './md';
 
+/** {@inheritDoc mdFunction} */
 export const md = Object.assign(mdFunction, {
   // inline marks
   bold,

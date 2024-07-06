@@ -1,6 +1,7 @@
 import { Block } from './elements';
 import type { BlockText, InlineText } from './text';
 
+/** Markdown renderer */
 export class Renderer {
   readonly #counters = new Map<string, number>();
   readonly #extraBlocks: Block[] = [];
