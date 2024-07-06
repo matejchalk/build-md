@@ -157,7 +157,6 @@ export class MarkdownDocument {
    */
   list(kind: 'task', items: [boolean, BlockText][]): MarkdownDocument;
 
-  /** @ignore */
   list(
     kindOrItems: ListKind | (BlockText | [boolean, BlockText])[],
     optionalItems?: (BlockText | [boolean, BlockText])[]
@@ -198,7 +197,6 @@ export class MarkdownDocument {
    */
   code(lang: string, text: Conditional<string>): MarkdownDocument;
 
-  /** @ignore */
   code(
     langOrText: Conditional<string>,
     optionalText?: Conditional<string>
@@ -318,7 +316,6 @@ export class MarkdownDocument {
    */
   details(summary: InlineText, text: Conditional<BlockText>): MarkdownDocument;
 
-  /** @ignore */
   details(
     summaryOrText: InlineText | Conditional<BlockText>,
     optionalText?: Conditional<BlockText>

@@ -1,0 +1,7 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["src/index.ts"],
+  "plugin": ["typedoc-material-theme", "typedoc-plugin-missing-exports"],
+  "themeColor": "#cb9820",
+  "includeVersion": true
+}
