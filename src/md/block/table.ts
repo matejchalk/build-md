@@ -76,6 +76,7 @@ export class TableColumnBlock extends Block {
     super();
   }
 
+  // ignored by parent
   render(renderer: Renderer): string {
     return renderer.renderText(this.heading);
   }
@@ -96,7 +97,12 @@ export class TableRowBlock extends Block {
 
   render(renderer: Renderer): string {
     return `| ${this.cells
-      .map(cell => renderer.renderInline(cell))
+      .map(cell =>
+        renderer
+          .renderInline(cell)
+          .replace(/\n/g, renderer.renderHtmlElement({ tag: 'br' }))
+          .replace(/\|/g, '\\|')
+      )
       .join(' | ')} |`;
   }
 
@@ -107,7 +113,9 @@ export class TableRowBlock extends Block {
         .map(cell =>
           renderer.renderHtmlElement({
             tag: 'td',
-            content: renderer.renderTextAsHtml(cell),
+            content: renderer
+              .renderTextAsHtml(cell)
+              .replace(/\n/g, renderer.renderHtmlElement({ tag: 'br' })),
           })
         )
         .join(''),

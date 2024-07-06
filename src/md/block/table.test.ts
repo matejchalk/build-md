@@ -1,3 +1,4 @@
+import { code } from '../inline/code';
 import { italic } from '../inline/italic';
 import { link } from '../inline/link';
 import { Renderer } from '../renderer';
@@ -216,6 +217,51 @@ describe('table', () => {
 | --- | --- |
 | Value 1a | Value 2a |
 | Value 1b | Value 2b |
+`.trim()
+    );
+  });
+
+  it('should convert newlines to br tags in table cells', () => {
+    expect(
+      table(
+        ['Style', 'Description'],
+        [
+          [
+            'CSS Modules',
+            'Styles written in CSS files, generates unique class names.\n(Preprocessors like SCSS also supported.)',
+          ],
+          [
+            'Styled Components',
+            [
+              'CSS-in-JS syntax for creating React components. Example:',
+              codeBlock(
+                'const Section = styled.section`\n  background: lightgrey;\n  padding: 4em;\n`'
+              ),
+            ],
+          ],
+        ]
+      ).render(renderer)
+    ).toBe(
+      `
+| Style | Description |
+| --- | --- |
+| CSS Modules | Styles written in CSS files, generates unique class names.<br />(Preprocessors like SCSS also supported.) |
+| Styled Components | CSS-in-JS syntax for creating React components. Example:<pre><code>const Section = styled.section\`<br />  background: lightgrey;<br />  padding: 4em;<br />\`</code></pre> |
+`.trim()
+    );
+  });
+
+  it('should escape vertical bars in table cells', () => {
+    expect(
+      table(
+        ['Property', 'Type'],
+        [[code('format'), code("'esm' | 'cjs'")]]
+      ).render(renderer)
+    ).toBe(
+      `
+| Property | Type |
+| --- | --- |
+| \`format\` | \`'esm' \\| 'cjs'\` |
 `.trim()
     );
   });
