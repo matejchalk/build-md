@@ -13,21 +13,25 @@ export function md<TItems extends Items>(
   strings: TemplateStringsArray,
   ...items: TItems
 ): (string | ElementOf<TItems>)[] {
-  const result: (string | IElement)[] = strings.flatMap((text, i) => {
-    const item = items[i];
-    if (item) {
-      if (Array.isArray(item)) {
-        return [text, ...item];
+  const result: (string | IElement)[] = strings
+    .flatMap((text, i) => {
+      const item = items[i];
+      if (item) {
+        if (Array.isArray(item)) {
+          return [text, ...item];
+        }
+        return [text, item];
       }
-      return [text, item];
-    }
-    return text;
-  });
+      return text;
+    })
+    .filter(Boolean);
+
   result.toString = () => {
     const renderer = new Renderer();
     return result
       .map(item => (typeof item === 'string' ? item : item.render(renderer)))
       .join('');
   };
+
   return result as (string | ElementOf<TItems>)[];
 }
