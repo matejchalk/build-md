@@ -1,7 +1,7 @@
 {
   "name": "build-md",
   "version": "0.0.0",
-  "description": "Builder to dynamically create well-formatted Markdown strings in JS/TS",
+  "description": "Markdown builder for JS/TS",
   "license": "MIT",
   "author": "Matěj Chalk <matejchalk@gmail.com>",
   "keywords": [
