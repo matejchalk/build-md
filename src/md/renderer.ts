@@ -120,12 +120,16 @@ export class Renderer {
   }
 }
 
-type RenderMarkdownOptions = {
-  attachableBlocks?: { new (...args: any[]): any }[];
+type Constructor<T = any> = {
+  new (...args: any[]): T;
+};
+
+export type RenderMarkdownOptions = {
+  attachableBlocks?: Constructor<Block>[];
   indentation?: number;
 };
 
-type HtmlElement = {
+export type HtmlElement = {
   tag: string;
   attrs?: Record<string, string | boolean>;
   content?: string | HtmlElement | (string | HtmlElement)[];

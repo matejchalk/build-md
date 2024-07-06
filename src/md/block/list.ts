@@ -1,5 +1,5 @@
 import { Block } from '../elements';
-import type { Renderer } from '../renderer';
+import type { Renderer, RenderMarkdownOptions } from '../renderer';
 import type { BlockText } from '../text';
 
 export type ListKind = 'unordered' | 'ordered' | 'task';
@@ -79,6 +79,14 @@ abstract class ListBlock<TItemBlock extends Block> extends Block {
   }
 }
 
+abstract class ListItemBlock extends Block {
+  readonly attachableBlocks: RenderMarkdownOptions['attachableBlocks'] = [
+    UnorderedListBlock,
+    OrderedListBlock,
+    TaskListBlock,
+  ];
+}
+
 export class UnorderedListBlock extends ListBlock<UnorderedListItemBlock> {
   renderAsHtml(renderer: Renderer): string {
     return renderer.renderHtmlElement({
@@ -88,14 +96,14 @@ export class UnorderedListBlock extends ListBlock<UnorderedListItemBlock> {
   }
 }
 
-export class UnorderedListItemBlock extends Block {
+export class UnorderedListItemBlock extends ListItemBlock {
   constructor(public readonly text: BlockText) {
     super();
   }
 
   render(renderer: Renderer): string {
     return `- ${renderer.renderText(this.text, {
-      attachableBlocks: ATTACHABLE_BLOCKS,
+      attachableBlocks: this.attachableBlocks,
       indentation: 2,
     })}`;
   }
@@ -117,14 +125,14 @@ export class OrderedListBlock extends ListBlock<OrderedListItemBlock> {
   }
 }
 
-export class OrderedListItemBlock extends Block {
+export class OrderedListItemBlock extends ListItemBlock {
   constructor(public readonly text: BlockText, public readonly order: number) {
     super();
   }
 
   render(renderer: Renderer): string {
     return `${this.order}. ${renderer.renderText(this.text, {
-      attachableBlocks: ATTACHABLE_BLOCKS,
+      attachableBlocks: this.attachableBlocks,
       indentation: this.order.toString().length + 2,
     })}`;
   }
@@ -146,7 +154,7 @@ export class TaskListBlock extends ListBlock<TaskListItemBlock> {
   }
 }
 
-export class TaskListItemBlock extends Block {
+export class TaskListItemBlock extends ListItemBlock {
   constructor(
     public readonly text: BlockText,
     public readonly checked: boolean
@@ -156,7 +164,7 @@ export class TaskListItemBlock extends Block {
 
   render(renderer: Renderer): string {
     return `- [${this.checked ? 'x' : ' '}] ${renderer.renderText(this.text, {
-      attachableBlocks: ATTACHABLE_BLOCKS,
+      attachableBlocks: this.attachableBlocks,
       indentation: 2,
     })}`;
   }
@@ -177,5 +185,3 @@ export class TaskListItemBlock extends Block {
     });
   }
 }
-
-const ATTACHABLE_BLOCKS = [UnorderedListBlock, OrderedListBlock, TaskListBlock];
