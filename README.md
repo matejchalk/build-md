@@ -5,3 +5,5 @@
 [![codecov](https://codecov.io/github/matejchalk/build-md/graph/badge.svg?token=L9BONN6LRT)](https://codecov.io/github/matejchalk/build-md)
 
 **Builder to dynamically create well-formatted Markdown strings in JS/TS.**
+
+![Diagram](./images/diagram.png)
