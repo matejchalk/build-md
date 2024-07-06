@@ -17,7 +17,9 @@ export function table(
         ? new TableColumnBlock(col.heading, col.alignment)
         : new TableColumnBlock(col)
     ),
-    rows.map(cells => new TableRowBlock(cells.slice(0, columns.length)))
+    rows.map(
+      cells => new TableRowBlock(columns.map((_, index) => cells[index] ?? ''))
+    )
   );
 }
 

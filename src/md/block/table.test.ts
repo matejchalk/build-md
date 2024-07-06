@@ -178,6 +178,29 @@ describe('table', () => {
     );
   });
 
+  it('should render empty cells if row missing array items', () => {
+    expect(
+      table(
+        ['Col. 1', 'Col. 2', 'Col. 3'],
+        [
+          ['Value 1a', 'Value 2a', 'Value 3a'],
+          ['Value 1b', 'Value 2b'],
+          ['Value 1c'],
+          [],
+        ]
+      ).render(renderer)
+    ).toBe(
+      `
+| Col. 1 | Col. 2 | Col. 3 |
+| --- | --- | --- |
+| Value 1a | Value 2a | Value 3a |
+| Value 1b | Value 2b |  |
+| Value 1c |  |  |
+|  |  |  |
+`.trim()
+    );
+  });
+
   it('should render rows without additional cells outside columns range', () => {
     expect(
       table(
