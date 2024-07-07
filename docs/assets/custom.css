@@ -1,0 +1,12 @@
+ul#tsd-nav-container {
+  display: flex;
+  flex-direction: column;
+}
+
+ul#tsd-nav-container > li:first-child {
+  order: 100;
+}
+
+ul#tsd-nav-container > li:first-child > details.tsd-accordion {
+  margin-left: 0;
+}
