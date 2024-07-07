@@ -20,10 +20,10 @@ describe('table', () => {
       ).render(renderer)
     ).toBe(
       `
-| x | y |
+| x   | y   |
 | --- | --- |
-| 0 | 0 |
-| 2 | 5 |
+| 0   | 0   |
+| 2   | 5   |
 `.trim()
     );
   });
@@ -65,10 +65,10 @@ describe('table', () => {
       ).render(renderer)
     ).toBe(
       `
-| Error | Environment | Occurrences |
-| :-- | :-: | --: |
-| TypeError: Cannot read properties of undefined (reading 'push') | production | 19 |
-| TypeError: Cannot read properties of null (reading '0') | staging | 5 |
+| Error                                                           | Environment | Occurrences |
+| :-------------------------------------------------------------- | :---------: | ----------: |
+| TypeError: Cannot read properties of undefined (reading 'push') | production  |          19 |
+| TypeError: Cannot read properties of null (reading '0')         |   staging   |           5 |
 `.trim()
     );
   });
@@ -116,10 +116,10 @@ describe('table', () => {
       ).render(renderer)
     ).toBe(
       `
-| URL | [Lighthouse](https://developer.chrome.com/docs/lighthouse) score |
-| --- | --- |
-| _/_ | 67 |
-| _/about_ | 82 |
+| URL      | [Lighthouse](https://developer.chrome.com/docs/lighthouse) score |
+| -------- | ---------------------------------------------------------------- |
+| _/_      | 67                                                               |
+| _/about_ | 82                                                               |
 `.trim()
     );
   });
@@ -146,8 +146,8 @@ describe('table', () => {
       ).render(renderer)
     ).toBe(
       `
-| Easy setup | CI automation |
-| --- | --- |
+| Easy setup                                                                                      | CI automation                                                                                                                   |
+| ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | Our setup wizard will get you up and running in seconds:<pre><code>npx docgen init</code></pre> | Refer to our docs for:<ul><li><a href="#github-actions">GitHub Actions</a></li><li><a href="#circle-ci">Circle CI</a></li></ul> |
 `.trim()
     );
@@ -192,12 +192,12 @@ describe('table', () => {
       ).render(renderer)
     ).toBe(
       `
-| Col. 1 | Col. 2 | Col. 3 |
-| --- | --- | --- |
+| Col. 1   | Col. 2   | Col. 3   |
+| -------- | -------- | -------- |
 | Value 1a | Value 2a | Value 3a |
-| Value 1b | Value 2b |  |
-| Value 1c |  |  |
-|  |  |  |
+| Value 1b | Value 2b |          |
+| Value 1c |          |          |
+|          |          |          |
 `.trim()
     );
   });
@@ -213,8 +213,8 @@ describe('table', () => {
       ).render(renderer)
     ).toBe(
       `
-| Col. 1 | Col. 2 |
-| --- | --- |
+| Col. 1   | Col. 2   |
+| -------- | -------- |
 | Value 1a | Value 2a |
 | Value 1b | Value 2b |
 `.trim()
@@ -243,9 +243,9 @@ describe('table', () => {
       ).render(renderer)
     ).toBe(
       `
-| Style | Description |
-| --- | --- |
-| CSS Modules | Styles written in CSS files, generates unique class names.<br />(Preprocessors like SCSS also supported.) |
+| Style             | Description                                                                                                                                                               |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CSS Modules       | Styles written in CSS files, generates unique class names.<br />(Preprocessors like SCSS also supported.)                                                                 |
 | Styled Components | CSS-in-JS syntax for creating React components. Example:<pre><code>const Section = styled.section\`<br />  background: lightgrey;<br />  padding: 4em;<br />\`</code></pre> |
 `.trim()
     );
@@ -259,8 +259,8 @@ describe('table', () => {
       ).render(renderer)
     ).toBe(
       `
-| Property | Type |
-| --- | --- |
+| Property | Type             |
+| -------- | ---------------- |
 | \`format\` | \`'esm' \\| 'cjs'\` |
 `.trim()
     );

@@ -66,7 +66,7 @@ export class TableBlock extends Block {
   }
 
   render(renderer: Renderer): string {
-    return [
+    const rowsWithoutPadding = [
       new TableRowBlock(this.columns.map(({ heading }) => heading)),
       new TableRowBlock(
         this.columns.map(({ alignment }) => {
@@ -83,9 +83,49 @@ export class TableBlock extends Block {
         })
       ),
       ...this.rows,
-    ]
-      .map(row => row.render(renderer))
-      .join('\n');
+    ].map(row => row.render(renderer));
+
+    const rowCells = rowsWithoutPadding.map(row =>
+      row
+        .slice(2, -2)
+        .split(' | ')
+        .map(cell => cell.trim())
+    );
+    const columnsCount = rowCells[0]!.length;
+    const columnWidths = Array.from({ length: columnsCount }).map(
+      (_, colIndex) =>
+        Math.max(...rowCells.map(row => row[colIndex]?.length ?? 0))
+    );
+
+    const rowsWithPadding = rowCells.map((row, rowIndex) => {
+      const cells = row.map((cell, colIndex) => {
+        const width = Math.max(cell.length, columnWidths[colIndex] ?? 0);
+
+        if (rowIndex === 1) {
+          const fillCount = width - cell.length;
+          return `${cell[0]}${'-'.repeat(fillCount)}${cell.slice(1)}`;
+        }
+
+        const alignment: TableCellAlignment =
+          (typeof this.columns[colIndex] === 'object' &&
+            this.columns[colIndex].alignment) ||
+          'left';
+        switch (alignment) {
+          case 'left':
+            return cell.padEnd(width, ' ');
+          case 'center':
+            const fillCount = width - cell.length;
+            const prefix = ' '.repeat(Math.floor(fillCount / 2));
+            const suffix = ' '.repeat(Math.ceil(fillCount / 2));
+            return `${prefix}${cell}${suffix}`;
+          case 'right':
+            return cell.padStart(width, ' ');
+        }
+      });
+      return `| ${cells.join(' | ')} |`;
+    });
+
+    return rowsWithPadding.join('\n');
   }
 
   renderAsHtml(renderer: Renderer): string {

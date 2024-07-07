@@ -1,10 +1,10 @@
 # CLI
 
-| Option | Description |
-| --- | --- |
-| `-i`, `--input` | Input file path |
-| `-o`, `--output` [^1] | Output file path |
-| `--version` | Print version and exit |
+| Option                | Description            |
+| --------------------- | ---------------------- |
+| `-i`, `--input`       | Input file path        |
+| `-o`, `--output` [^1] | Output file path       |
+| `--version`           | Print version and exit |
 
 <details>
 <summary>Examples</summary>
