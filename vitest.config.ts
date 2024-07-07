@@ -5,5 +5,8 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     include: ['src/**/*.test.ts'],
+    coverage: {
+      include: ['src/**/*.ts'],
+    },
   },
 });
