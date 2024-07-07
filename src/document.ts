@@ -327,6 +327,67 @@ export class MarkdownDocument {
   }
 
   /**
+   * Conditionally adds elements to document using callback function.
+   *
+   * Convenient when multiple elements are subject to same conditional logic.
+   *
+   * @example
+   * new MarkdownDocument()
+   *   .$if(
+   *     shouldIncludeFooter(),
+   *     doc => doc.rule().paragraph('Some footer content.')
+   *   )
+   * @example
+   * new MarkdownDocument()
+   *   .$if(
+   *     items.length > 0,
+   *     doc => doc.paragraph(`${items.length} items found:`).list(items),
+   *     doc => doc.paragraph('No items found.')
+   *   )
+   *
+   * @param condition boolean predicate - if `true` then {@link ifFn} is used, if `false` then either {@link elseFn} is used or nothing is changed
+   * @param ifFn callback used when {@link condition} is `true`, receives current document and should return modified document
+   * @param elseFn optional callback used when {@link condition} is `false`, receives current document and should return modified document
+   * @returns document with or without additional blocks based on condition
+   */
+  $if(
+    condition: boolean,
+    ifFn: (document: MarkdownDocument) => MarkdownDocument,
+    elseFn?: (document: MarkdownDocument) => MarkdownDocument
+  ): MarkdownDocument {
+    if (condition) {
+      return ifFn(this);
+    }
+    return elseFn?.(this) ?? this;
+  }
+
+  /**
+   * Iteratively adds element to document using callback function.
+   *
+   * Convenient when multiple elements need be added dynamically per item in array.
+   *
+   * @example
+   * new MarkdownDocument().$foreach(
+   *   sections,
+   *   (doc, section) => doc.heading(2, section.title).paragraph(section.content)
+   * )
+   *
+   * @template T type of each array item
+   * @param items array of items to be iterated over
+   * @param eachFn callback invoked for every item in {@link items}, receives current document and should return modified document
+   * @returns document with additional blocks from each array item
+   */
+  $foreach<T>(
+    items: T[],
+    eachFn: (document: MarkdownDocument, item: T) => MarkdownDocument
+  ): MarkdownDocument {
+    return items.reduce<MarkdownDocument>(
+      (acc, item) => eachFn(acc, item),
+      this
+    );
+  }
+
+  /**
    * Renders document to Markdown.
    *
    * @returns Markdown string

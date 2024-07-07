@@ -135,4 +135,56 @@ describe('MarkdownDocument', () => {
     const doc2 = doc1.paragraph('Hello, world!');
     expect(doc1.toString()).toBe(doc2.toString());
   });
+
+  it('should render blocks when $if condition is true', () => {
+    expect(
+      new MarkdownDocument()
+        .heading(1, 'My title')
+        .$if(true, doc =>
+          doc.heading(2, 'Greetings').paragraph('Hello, world!')
+        )
+        .toString()
+    ).toBe('# My title\n\n## Greetings\n\nHello, world!\n');
+  });
+
+  it('should not render blocks when $if condition is false', () => {
+    expect(
+      new MarkdownDocument()
+        .heading(1, 'My title')
+        .$if(false, doc =>
+          doc.heading(2, 'Greetings').paragraph('Hello, world!')
+        )
+        .toString()
+    ).toBe('# My title\n');
+  });
+
+  it('should render "else" blocks when $if condition is false', () => {
+    expect(
+      new MarkdownDocument()
+        .heading(1, 'My title')
+        .$if(
+          false,
+          doc => doc.heading(2, 'Greetings').paragraph('Hello, world!'),
+          doc => doc.paragraph('Not in the mood to greet anyone.')
+        )
+        .toString()
+    ).toBe('# My title\n\nNot in the mood to greet anyone.\n');
+  });
+
+  it('should render blocks for each item with $foreach', () => {
+    expect(
+      new MarkdownDocument()
+        .$foreach(
+          [
+            { title: 'Chapter 1', content: 'Content of 1st chapter.' },
+            { title: 'Chapter 2', content: 'Content of 2nd chapter.' },
+            { title: 'Chapter 3', content: 'Content of 3rd chapter.' },
+          ],
+          (doc, { title, content }) => doc.heading(2, title).paragraph(content)
+        )
+        .toString()
+    ).toBe(
+      '## Chapter 1\n\nContent of 1st chapter.\n\n## Chapter 2\n\nContent of 2nd chapter.\n\n## Chapter 3\n\nContent of 3rd chapter.\n'
+    );
+  });
 });
