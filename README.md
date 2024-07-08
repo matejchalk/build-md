@@ -101,3 +101,29 @@ const markdown = new MarkdownDocument()
 
 await writeFile('CONTRIBUTING.md', markdown);
 ```
+
+## List of supported Markdown elements
+
+| Element            | Usage                          | Example                                                                                                                                                                |
+| :----------------- | :----------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Bold               | `md.bold(text)`                | **important text**                                                                                                                                                     |
+| Italic             | `md.italic(text)`              | _emphasized text_                                                                                                                                                      |
+| Link               | `md.link(href, text?, title?)` | [link](.)                                                                                                                                                              |
+| Image              | `md.image(src, alt)`           | ![image](https://img.shields.io/badge/🖼️_image-lightgreen)                                                                                                             |
+| Code               | `md.code(text)`                | `source_code`                                                                                                                                                          |
+| Strikethrough [^1] | `md.strikethrough(text)`       | ~~crossed out~~                                                                                                                                                        |
+| Footnote [^1]      | `md.footnote(text, label?)`    | [^2]                                                                                                                                                                   |
+| Heading            | `md.heading(level, text)`      | <h2>Title</h2>                                                                                                                                                         |
+| Paragraph          | `md.paragraph(text)`           | <p>long text</p>                                                                                                                                                       |
+| Code block         | `md.codeBlock(lang?, text)`    | <pre lang="js"><code>sourceCode({&#13; &#160;multiLine: true,&#13; &#160;syntaxHighlighting: true&#13;})</code></pre>                                                  |
+| Horizontal rule    | `md.rule()`                    | <hr />                                                                                                                                                                 |
+| Blockquote         | `md.quote(text)`               | <blockquote>interesting quote</blockquote>                                                                                                                             |
+| Unordered list     | `md.list(items)`               | <ul><li>list item 1</li><li>list item 2</li></ul>                                                                                                                      |
+| Ordered list       | `md.list('ordered', items)`    | <ol><li>list item 1</li><li>list item 2</li></ol>                                                                                                                      |
+| Task list [^1]     | `md.list('task', items)`       | <ul><li>&#x2611; list item 1</li><li>&#x2610; list item 2</li></ul>                                                                                                    |
+| Table [^1]         | `md.table(columns, rows)`      | <table><tr><th>heading 1</th><th>heading 2</th></tr><tr><td>row 1, col. 1</td><td>row 1, col. 2</td></tr><tr><td>row 2, col. 1</td><td>row 2, col. 2</td></tr></table> |
+| Details [^3]       | `md.details(summary?, text)`   | <details>expandable content</details>                                                                                                                                  |
+
+[^1]: Not part of basic Markdown syntax, but supported by some Markdown extensions like GFM.
+[^2]: Footnotes render a label in place of insertion, as well as appending a block to the end of the document with the content.
+[^3]: Always rendered as HTML.
