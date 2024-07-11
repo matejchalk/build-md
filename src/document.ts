@@ -10,7 +10,7 @@ import {
 } from './md';
 
 /** Content which may include falsy value from conditional expression, in which case document block should be skipped. */
-type Conditional<T> = T | null | undefined | false;
+type Conditional<T> = T | null | undefined | false | 0;
 
 /** Options for customizing {@link MarkdownDocument} behaviour. */
 type MarkdownDocumentOptions = {
@@ -95,7 +95,7 @@ export class MarkdownDocument {
    * @returns document with additional unordered list block
    * @see {@link md.list}
    */
-  list(items: BlockText[]): MarkdownDocument;
+  list(items: Conditional<BlockText[]>): MarkdownDocument;
 
   /**
    * Adds **unordered list** to document (unless empty).
@@ -116,7 +116,7 @@ export class MarkdownDocument {
    * @returns document with additional unordered list block
    * @see {@link md.list}
    */
-  list(kind: 'unordered', items: BlockText[]): MarkdownDocument;
+  list(kind: 'unordered', items: Conditional<BlockText[]>): MarkdownDocument;
 
   /**
    * Adds **ordered list** to document (unless empty).
@@ -137,7 +137,7 @@ export class MarkdownDocument {
    * @returns document with additional ordered list block
    * @see {@link md.list}
    */
-  list(kind: 'ordered', items: BlockText[]): MarkdownDocument;
+  list(kind: 'ordered', items: Conditional<BlockText[]>): MarkdownDocument;
 
   /**
    * Adds **task list** to document (unless empty). Also known as _checklist_ or _todo_ list.
@@ -155,14 +155,17 @@ export class MarkdownDocument {
    * @returns document with additional task list block
    * @see {@link md.list}
    */
-  list(kind: 'task', items: [boolean, BlockText][]): MarkdownDocument;
+  list(
+    kind: 'task',
+    items: Conditional<[boolean, BlockText][]>
+  ): MarkdownDocument;
 
   list(
-    kindOrItems: ListKind | (BlockText | [boolean, BlockText])[],
-    optionalItems?: (BlockText | [boolean, BlockText])[]
+    kindOrItems: ListKind | Conditional<(BlockText | [boolean, BlockText])[]>,
+    optionalItems?: Conditional<(BlockText | [boolean, BlockText])[]>
   ): MarkdownDocument {
     const items = Array.isArray(kindOrItems) ? kindOrItems : optionalItems;
-    if (!items?.length) return this;
+    if (!items || !items.length) return this;
     return this.#append(
       md.list(
         ...([kindOrItems, optionalItems] as Parameters<(typeof md)['list']>)

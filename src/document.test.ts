@@ -116,7 +116,8 @@ describe('MarkdownDocument', () => {
         .heading(1, '')
         .paragraph(undefined)
         .list([])
-        .code(null)
+        .list('ordered', null)
+        .code(0)
         .table([], [])
         .toString()
     ).toBe('\n');
