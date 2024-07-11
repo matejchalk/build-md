@@ -303,3 +303,4 @@ md`${md.bold(severity)} severity vulnerability in ${md.code(name)}`.toString();
 - Run tests with `npm test` or `npm run test:watch` (uses [Vitest](https://vitest.dev/)).
 - Generate documentation with `npm run docs` (uses [TypeDoc](https://typedoc.org/)).
 - Compile TypeScript sources with `npm run build` (uses [tsup](https://tsup.egoist.dev/)).
+- Use [Conventional Commits](https://www.conventionalcommits.org/) prompts with `npm run commit`.

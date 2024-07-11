@@ -34,6 +34,7 @@
   "scripts": {
     "prepublishOnly": "npm run build",
     "prepare": "husky",
+    "commit": "git-cz",
     "build": "tsup",
     "test": "vitest run",
     "test:watch": "vitest watch",
@@ -41,9 +42,15 @@
     "docs": "typedoc"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "@commitlint/cz-commitlint": "^19.2.0",
     "@types/node": "^20.14.9",
     "@vitest/coverage-v8": "^1.6.0",
+    "commitizen": "^4.3.0",
+    "commitlint-plugin-tense": "^1.0.2",
     "husky": "^9.0.11",
+    "inquirer": "^9.3.5",
     "tsup": "^8.0.2",
     "typedoc": "^0.26.3",
     "typedoc-material-theme": "^1.1.0",
@@ -51,5 +58,10 @@
     "typedoc-plugin-missing-exports": "^3.0.0",
     "typescript": "^5.5.2",
     "vitest": "^1.6.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/cz-commitlint"
+    }
   }
 }
