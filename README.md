@@ -13,8 +13,8 @@ Comprehensive **Markdown builder** for JavaScript/TypeScript.
 ## ⭐ Key features
 
 - ✍️ Its **intuitive syntax** makes it convenient for generating Markdown from JavaScript/TypeScript code.
-  - _Builder pattern_ used for creating Markdown documents.
-  - _Tagged template literal_ used for inline Markdown formatting and nesting Markdown blocks.
+  - [Builder pattern](https://refactoring.guru/design-patterns/builder) used for creating Markdown documents.
+  - [Tagged template literal](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) used for inline Markdown formatting and nesting Markdown blocks.
 - ✅ Has **comprehensive support** for most commonly used Markdown elements.
   - All elements from Markdown's [basic syntax](https://www.markdownguide.org/basic-syntax/) are included.
   - Also supports many elements from [extended syntax](https://www.markdownguide.org/extended-syntax/) (e.g. from [GitHub Flavored Markdown](https://github.github.com/gfm/)).
@@ -28,7 +28,7 @@ Comprehensive **Markdown builder** for JavaScript/TypeScript.
   - Even for very complex dynamic documents, there should be no need to resort to imperative logic like `if`/`else` branches or `for` loops. But if you prefer this coding style, then its supported in mutable mode (immutable is default).
   - 📖 See [Dynamic content](#-dynamic-content).
 - 🎀 Markdown output is **well-formatted**.
-  - Automatically inserts line breaks and indentation as appropriate. Even Markdown tables are aligned to be more readable.
+  - Automatically inserts line breaks and indentation when appropriate. Even Markdown tables are aligned to be more readable.
   - No need to run additional tools like Prettier to have nicely formatted Markdown.
 - ♻️ Is lightweight with zero dependencies, as well as being completely **runtime agnostic** with regards to browser vs Node, CJS vs ESM, etc.
 
@@ -196,7 +196,7 @@ new MarkdownDocument()
   .toString();
 ```
 
-When it comes to iterative logic, then for individual blocks like `list`s and `table`s you can use the usual array methods (`.map`, `.filter`, etc.) to make the content dynamic. But if you need to generate multiple blocks per array item, the `$foreach` method comes in handy.
+When it comes to iterative logic, then for individual blocks like lists and tables you can use the usual array methods (`.map`, `.filter`, etc.) to make the content dynamic. But if you need to generate multiple blocks per array item, the `$foreach` method comes in handy.
 
 Provide an array for the 1st argument, and a callback for the 2nd. The callback function is called for each item in the array, and is expected to add blocks to the current `MarkdownDocument` instance.
 
@@ -288,7 +288,7 @@ function createMarkdownCommentForMonorepo(
 
 The `md` tagged template literal is for composing text which includes Markdown elements.
 It provides an intuitive syntax for adding inline formatting, as well as embedding nested blocks within top-level document blocks.
-Its output is embeddable into all elements (with a few logical exceptions like code blocks), making it the glue for building documents with a complex hierarchy.
+Its output is embeddable into all elements (with a few logical exceptions like code blocks), so it acts as the glue for building documents with a complex hierarchy.
 
 It also comes in handy when you don't want to render a full document, but only need a one-line Markdown string. Just like for the `MarkdownDocument` class, calling `.toString()` returns the converted Markdown text.
 
