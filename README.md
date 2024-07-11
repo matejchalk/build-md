@@ -10,15 +10,15 @@ Comprehensive **Markdown builder** for JavaScript/TypeScript.
 
 📖 Full documentation is hosted at <https://matejchalk.github.io/build-md/>.
 
-## Key features
+## ⭐ Key features
 
-- ⌨️ Its **intuitive syntax** makes it convenient for generating Markdown from JavaScript/TypeScript code.
+- ✍️ Its **intuitive syntax** makes it convenient for generating Markdown from JavaScript/TypeScript code.
   - _Builder pattern_ used for creating Markdown documents.
   - _Tagged template literal_ used for inline Markdown formatting and nesting Markdown blocks.
-- 🖺 Has **comprehensive support** for many commonly used Markdown elements.
+- ✅ Has **comprehensive support** for many commonly used Markdown elements.
   - All elements from Markdown's [basic syntax](https://www.markdownguide.org/basic-syntax/) are included.
   - Also supports many elements from [extended syntax](https://www.markdownguide.org/extended-syntax/) (e.g. from [GitHub Flavored Markdown](https://github.github.com/gfm/)).
-- 📑 Enables **logical nesting** of Markdown elements and uses **contextual rendering** to ensure output will be rendered correctly.
+- 🗂️ Enables **logical nesting** of Markdown elements and uses **contextual rendering** to ensure output will be rendered correctly.
   - Blocks may contain inline elements or even other blocks (e.g. nested lists), inline elements may contain other inline elements, etc.
   - Each element may be rendered as HTML instead of Markdown if needed. For example, block elements in Markdown tables will automatically render using equivalent HTML tags. And if a parent element is rendered as HTML, so will all its children.
 - 🧮 Document builder enables writing **conditional and iterative logic** in a declarative way.
@@ -29,7 +29,7 @@ Comprehensive **Markdown builder** for JavaScript/TypeScript.
   - Automatically inserts line breaks and indentation as appropriate. Even Markdown tables are aligned to be more readable.
   - No need to run additional tools like Prettier to have nicely formatted Markdown.
 
-## Quickstart
+## 🚀 Quickstart
 
 Install `build-md` with your package manager in the usual way. E.g. to install as a dev dependency using NPM:
 
@@ -102,7 +102,7 @@ const markdown = new MarkdownDocument()
 await writeFile('CONTRIBUTING.md', markdown);
 ```
 
-## List of supported Markdown elements
+## 📋 List of supported Markdown elements
 
 | Element            | Usage                                                                                                                                                                                                                          | Example                                                                                                                                                                |
 | :----------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -120,10 +120,171 @@ await writeFile('CONTRIBUTING.md', markdown);
 | Blockquote         | [`MarkdownDocument#quote(text)`](https://matejchalk.github.io/build-md/classes/MarkdownDocument.html#quote)<br />[`md.quote(text)`](https://matejchalk.github.io/build-md/functions/md.html#quote)                             | <blockquote>interesting quote</blockquote>                                                                                                                             |
 | Unordered list     | [`MarkdownDocument#list(items)`](https://matejchalk.github.io/build-md/classes/MarkdownDocument.html#list)<br />[`md.list(items)`](https://matejchalk.github.io/build-md/functions/md.html#list)                               | <ul><li>list item 1</li><li>list item 2</li></ul>                                                                                                                      |
 | Ordered list       | [`MarkdownDocument#list('ordered', items)`](https://matejchalk.github.io/build-md/classes/MarkdownDocument.html#list)<br />[`md.list('ordered', items)`](https://matejchalk.github.io/build-md/functions/md.html#list)         | <ol><li>list item 1</li><li>list item 2</li></ol>                                                                                                                      |
-| Task list [^1]     | [`MarkdownDocument#list('task', items)`](https://matejchalk.github.io/build-md/classes/MarkdownDocument.html#list)<br />[`md.list('task', items)`](https://matejchalk.github.io/build-md/functions/md.html#list)               | <ul><li>&#x2611; list item 1</li><li>&#x2610; list item 2</li></ul>                                                                                                    |
+| Task list [^1]     | [`MarkdownDocument#list('task', items)`](https://matejchalk.github.io/build-md/classes/MarkdownDocument.html#list)<br />[`md.list('task', items)`](https://matejchalk.github.io/build-md/functions/md.html#list)               | &#x2611; list item 1<br />&#x2610; list item 2                                                                                                                         |
 | Table [^1]         | [`MarkdownDocument#table(columns, rows)`](https://matejchalk.github.io/build-md/classes/MarkdownDocument.html#table)<br />[`md.table(columns, rows)`](https://matejchalk.github.io/build-md/functions/md.html#table)           | <table><tr><th>heading 1</th><th>heading 2</th></tr><tr><td>row 1, col. 1</td><td>row 1, col. 2</td></tr><tr><td>row 2, col. 1</td><td>row 2, col. 2</td></tr></table> |
 | Details [^3]       | [`MarkdownDocument#details(summary?, text)`](https://matejchalk.github.io/build-md/classes/MarkdownDocument.html#details)<br />[`md.details(summary?, text)`](https://matejchalk.github.io/build-md/functions/md.html#details) | <details>expandable content</details>                                                                                                                                  |
 
 [^1]: Not part of basic Markdown syntax, but supported by some Markdown extensions like GFM.
 [^2]: Footnotes render a label in place of insertion, as well as appending a block to the end of the document with the content.
 [^3]: Always rendered as HTML.
+
+## 🥽 Diving in
+
+### 🧩 Dynamic content
+
+While the [Quickstart](#-quickstart) example shows how to render static Markdown, the main purpose of a Markdown builder is to generate content dynamically. The `MarkdownDocument` class is designed for writing conditional or iterative logic in a simple and declarative way, without having to break out of the builder chain.
+
+For starters, document blocks with empty content are automatically skipped. So if the expression you write for a top-level block's content evaluates to some empty value (falsy or empty array), then the block won't be appended to the document.
+
+```ts
+function createMarkdownComment(
+  totalCount: number,
+  passedCount: number,
+  logsUrl: string | null,
+  failedChecks?: string[]
+): string {
+  return (
+    new MarkdownDocument()
+      .heading(1, `🛡️ Quality gate - ${passedCount}/${totalCount}`)
+      // 👇 `false` will skip quote
+      .quote(passedCount === totalCount && '✅ Everything in order!')
+      // 👇 `undefined` or `0` will skip heading
+      .heading(2, failedChecks?.length && '❌ Failed checks')
+      // 👇 `undefined` or `[]` will skip list
+      .list(failedChecks?.map(md.code))
+      // 👇 `""` or `null` will skip paragraph
+      .paragraph(logsUrl && md.link(logsUrl, '🔗 CI logs'))
+      .toString()
+  );
+}
+```
+
+### 🧮 Control flow methods
+
+The conditional expressions approach outlined above is convenient for toggling individual blocks. But if your logic affects multiple blocks at once, you may reach instead for one of the provided control flow methods – [`$if`](https://matejchalk.github.io/build-md/classes/MarkdownDocument.html#_if) and [`$foreach`](https://matejchalk.github.io/build-md/classes/MarkdownDocument.html#_foreach).
+
+The `$if` method is useful for subjecting multiple blocks to a single condition. Provide a callback function which returns the `MarkdownDocument` instance with added blocks. This callback will only be used if the condition is `true`.
+
+```ts
+new MarkdownDocument()
+  .heading(1, `🛡️ Quality gate - ${passedCount}/${totalCount}`)
+  .quote(passedCount === totalCount && '✅ Everything in order!')
+  // 👇 heading and list added if `passedCount < totalCount`, otherwise both skipped
+  .$if(passedCount < totalCount, doc =>
+    doc.heading(2, '❌ Failed checks').list(failedChecks?.map(md.code))
+  )
+  .paragraph(logsUrl && md.link(logsUrl, '🔗 CI logs'))
+  .toString();
+```
+
+Optionally, you may provide another callback which will be used if the condition is `false` (think of it as the `else`-branch).
+
+```ts
+new MarkdownDocument()
+  .heading(1, `🛡️ Quality gate - ${passedCount}/${totalCount}`)
+  .$if(
+    passedCount === totalCount,
+    // 👇 quote added if `passedCount === totalCount` is true
+    doc => doc.quote('✅ Everything in order!'),
+    // 👇 heading and list added if `passedCount === totalCount` is false
+    doc => doc.heading(2, '❌ Failed checks').list(failedChecks?.map(md.code))
+  )
+  .paragraph(logsUrl && md.link(logsUrl, '🔗 CI logs'))
+  .toString();
+```
+
+When it comes to iterative logic, then for individual blocks like `list`s and `table`s you can use the usual array methods (`.map`, `.filter`, etc.) to make the content dynamic. But if you need to generate multiple blocks per array item, the `$foreach` method comes in handy.
+
+Provide an array for the 1st argument, and a callback for the 2nd. The callback function is called for each item in the array, and is expected to add blocks to the current `MarkdownDocument` instance.
+
+```ts
+function createMarkdownCommentForMonorepo(
+  projects: {
+    name: string;
+    totalCount: number;
+    passedCount: number;
+    logsUrl: string | null;
+    failedChecks?: string[];
+  }[]
+): string {
+  return new MarkdownDocument()
+    .heading(1, `🛡️ Quality gate (${projects.length} projects)`)
+    .$foreach(
+      projects,
+      (doc, { name, totalCount, passedCount, logsUrl, failedChecks }) =>
+        doc
+          .heading(2, `💼 ${name} - ${passedCount}/${totalCount}`)
+          .$if(
+            passedCount === totalCount,
+            doc => doc.quote('✅ Everything in order!'),
+            doc =>
+              doc
+                .heading(3, '❌ Failed checks')
+                .list(failedChecks?.map(md.code))
+          )
+          .paragraph(logsUrl && md.link(logsUrl, '🔗 CI logs'))
+    )
+    .toString();
+}
+```
+
+#### 🧊 Immutable vs mutable
+
+By default, instances of `MarkdownDocument` are immutable. Methods for appending document blocks return a new instance, leaving the original instance unaffected.
+
+```ts
+// 👇 `extendedDocument` has additional blocks, `baseDocument` unmodified
+const extendedDocument = baseDocument
+  .rule()
+  .paragraph(md`Made with ❤️ by ${md.link(OWNER_LINK, OWNER_NAME)}`);
+```
+
+This is an intentional design decision to encourage building Markdown documents declaratively, instead of an imperative approach using `if`/`else` branches, `for` loops, etc.
+
+However, if you prefer to write your logic imperatively, then you have the option of setting `mutable: true` when instantiating a document.
+
+```ts
+function createMarkdownCommentForMonorepo(
+  projects: {
+    name: string;
+    totalCount: number;
+    passedCount: number;
+    logsUrl: string | null;
+    failedChecks?: string[];
+  }[]
+): string {
+  // 👇 all method calls will mutate document
+  const doc = new MarkdownDocument({ mutable: true });
+
+  // 👇 ignoring return value would have no effect in immutable mode
+  doc.heading(1, `🛡️ Quality gate (${projects.length} projects)`);
+
+  // 👇 imperative loops work because of side-effects
+  for (const project of projects) {
+    const { name, totalCount, passedCount, logsUrl, failedChecks } = project;
+
+    doc.heading(2, `💼 ${name} - ${passedCount}/${totalCount}`);
+
+    // 👇 imperative conditions work because of side-effects
+    if (passedCount === totalCount) {
+      doc.quote('✅ Everything in order!');
+    } else {
+      doc.heading(3, '❌ Failed checks').list(failedChecks?.map(md.code));
+    }
+
+    if (logsUrl) {
+      doc.paragraph(md.link(logsUrl, '🔗 CI logs'));
+    }
+  }
+
+  return doc.toString();
+}
+```
+
+### 📝 Inline formatting
+
+TODO
+
+## 🤝 Contributing
+
+TODO
