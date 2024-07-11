@@ -15,9 +15,10 @@ Comprehensive **Markdown builder** for JavaScript/TypeScript.
 - ✍️ Its **intuitive syntax** makes it convenient for generating Markdown from JavaScript/TypeScript code.
   - _Builder pattern_ used for creating Markdown documents.
   - _Tagged template literal_ used for inline Markdown formatting and nesting Markdown blocks.
-- ✅ Has **comprehensive support** for many commonly used Markdown elements.
+- ✅ Has **comprehensive support** for most commonly used Markdown elements.
   - All elements from Markdown's [basic syntax](https://www.markdownguide.org/basic-syntax/) are included.
   - Also supports many elements from [extended syntax](https://www.markdownguide.org/extended-syntax/) (e.g. from [GitHub Flavored Markdown](https://github.github.com/gfm/)).
+  - 📖 See [List of all supported Markdown elements](#-list-of-supported-markdown-elements).
 - 🗂️ Enables **logical nesting** of Markdown elements and uses **contextual rendering** to ensure output will be rendered correctly.
   - Blocks may contain inline elements or even other blocks (e.g. nested lists), inline elements may contain other inline elements, etc.
   - Each element may be rendered as HTML instead of Markdown if needed. For example, block elements in Markdown tables will automatically render using equivalent HTML tags. And if a parent element is rendered as HTML, so will all its children.
@@ -25,9 +26,11 @@ Comprehensive **Markdown builder** for JavaScript/TypeScript.
   - Falsy values from regular JavaScript expressions are ignored.
   - Special methods provided for adding multiple related elements conditionally or in a loop.
   - Even for very complex dynamic documents, there should be no need to resort to imperative logic like `if`/`else` branches or `for` loops. But if you prefer this coding style, then its supported in mutable mode (immutable is default).
+  - 📖 See [Dynamic content](#-dynamic-content).
 - 🎀 Markdown output is **well-formatted**.
   - Automatically inserts line breaks and indentation as appropriate. Even Markdown tables are aligned to be more readable.
   - No need to run additional tools like Prettier to have nicely formatted Markdown.
+- ♻️ Is lightweight with zero dependencies, as well as being completely **runtime agnostic** with regards to browser vs Node, CJS vs ESM, etc.
 
 ## 🚀 Quickstart
 
@@ -283,8 +286,20 @@ function createMarkdownCommentForMonorepo(
 
 ### 📝 Inline formatting
 
-TODO
+The `md` tagged template literal is for composing text which includes Markdown elements.
+It provides an intuitive syntax for adding inline formatting, as well as embedding nested blocks within top-level document blocks.
+Its output is embeddable into all elements (with a few logical exceptions like code blocks), making it the glue for building documents with a complex hierarchy.
+
+It also comes in handy when you don't want to render a full document, but only need a one-line Markdown string. Just like for the `MarkdownDocument` class, calling `.toString()` returns the converted Markdown text.
+
+```ts
+md`${md.bold(severity)} severity vulnerability in ${md.code(name)}`.toString();
+```
 
 ## 🤝 Contributing
 
-TODO
+- Prerequisite is having Node.js installed.
+- Install dev dependencies with `npm install`.
+- Run tests with `npm test` or `npm run test:watch` (uses [Vitest](https://vitest.dev/)).
+- Generate documentation with `npm run docs` (uses [TypeDoc](https://typedoc.org/)).
+- Compile TypeScript sources with `npm run build` (uses [tsup](https://tsup.egoist.dev/)).
