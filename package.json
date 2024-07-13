@@ -39,7 +39,8 @@
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
-    "docs": "typedoc"
+    "docs": "typedoc",
+    "release": "release-it"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
@@ -51,6 +52,7 @@
     "commitlint-plugin-tense": "^1.0.2",
     "husky": "^9.0.11",
     "inquirer": "^9.3.5",
+    "release-it": "^17.5.0",
     "semantic-release": "^24.0.0",
     "tsup": "^8.0.2",
     "typedoc": "^0.26.3",

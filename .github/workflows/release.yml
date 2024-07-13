@@ -1,5 +1,8 @@
 name: Release
 
+# disabled until stable version, as semantic-relaease doesn't support versions 0.x.x
+# https://github.com/semantic-release/semantic-release/blob/master/docs/support/FAQ.md#can-i-set-the-initial-release-version-of-my-package-to-001
+
 on:
   push:
     branches:
