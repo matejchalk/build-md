@@ -38,10 +38,15 @@ export const md = Object.assign(mdFunction, {
 
 export { Renderer } from './renderer';
 
+export type { Conditional } from './conditional';
 export type { Block, Mark } from './elements';
 export type { BlockText, InlineText } from './text';
-export type { Conditional } from './conditional';
 
 export type { HeadingLevel } from './block/heading';
 export type { ListKind } from './block/list';
-export type { TableCellAlignment } from './block/table';
+export type {
+  TableCellAlignment,
+  TableColumn,
+  TableColumnObject,
+  TableRow,
+} from './block/table';

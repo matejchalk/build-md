@@ -7,7 +7,8 @@ import {
   type HeadingLevel,
   type InlineText,
   type ListKind,
-  type TableCellAlignment,
+  type TableColumn,
+  type TableRow,
 } from './md';
 
 /** Options for customizing {@link MarkdownDocument} behaviour. */
@@ -271,12 +272,7 @@ export class MarkdownDocument {
    * @returns document with additional table block
    * @see {@link md.table}
    */
-  table(
-    columns:
-      | BlockText[]
-      | { heading: BlockText; alignment?: TableCellAlignment }[],
-    rows: BlockText[][]
-  ): MarkdownDocument {
+  table(columns: TableColumn[], rows: TableRow[]): MarkdownDocument {
     if (columns.length === 0) return this;
     return this.#append(md.table(columns, rows));
   }

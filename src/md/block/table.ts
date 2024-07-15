@@ -3,7 +3,21 @@ import { Block } from '../elements';
 import type { Renderer } from '../renderer';
 import type { BlockText } from '../text';
 
+/** Alignment of table cells */
 export type TableCellAlignment = 'left' | 'center' | 'right';
+
+/** Shape of input for row in table */
+export type TableRow = BlockText[];
+
+/** Shape of input for column in table */
+export type TableColumn = BlockText | TableColumnObject;
+/** Shape of input for column in table which supports custom alignment */
+export type TableColumnObject = {
+  /** Column header text */
+  heading: BlockText;
+  /** Column alignment */
+  alignment?: TableCellAlignment;
+};
 
 /**
  * Creates **table**.
@@ -38,13 +52,7 @@ export type TableCellAlignment = 'left' | 'center' | 'right';
  * @returns table block
  * @see {@link MarkdownDocument.table}
  */
-export function table(
-  columns: (
-    | BlockText
-    | { heading: BlockText; alignment?: TableCellAlignment }
-  )[],
-  rows: BlockText[][]
-): TableBlock {
+export function table(columns: TableColumn[], rows: TableRow[]): TableBlock {
   return new TableBlock(
     columns.map(col =>
       typeof col === 'object' && 'heading' in col
