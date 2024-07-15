@@ -40,7 +40,8 @@
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
     "docs": "typedoc",
-    "release": "release-it"
+    "release": "release-it",
+    "release:dry-run": "release-it --dry-run"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
