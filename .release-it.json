@@ -2,7 +2,7 @@
   "github": {
     "release": true
   },
-  "src": {
+  "git": {
     "commitMessage": "chore: release v%s"
   }
 }
