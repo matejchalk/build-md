@@ -1,11 +1,10 @@
+import type { Conditional } from './conditional';
 import type { IElement } from './elements';
 import { Renderer } from './renderer';
 
-type Items<TElement extends IElement = IElement> = (
-  | string
-  | TElement
-  | (string | TElement)[]
-)[];
+type Items<TElement extends IElement = IElement> = Conditional<
+  string | TElement | (string | TElement)[]
+>[];
 type ElementOf<TItems extends Items> = TItems extends Items<infer U>
   ? U
   : never;

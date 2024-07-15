@@ -3,14 +3,12 @@ import {
   md,
   type Block,
   type BlockText,
+  type Conditional,
   type HeadingLevel,
   type InlineText,
   type ListKind,
   type TableCellAlignment,
 } from './md';
-
-/** Content which may include falsy value from conditional expression, in which case document block should be skipped. */
-type Conditional<T> = T | null | undefined | false | 0;
 
 /** Options for customizing {@link MarkdownDocument} behaviour. */
 type MarkdownDocumentOptions = {

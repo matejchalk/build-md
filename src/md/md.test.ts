@@ -24,6 +24,10 @@ describe('md', () => {
     );
   });
 
+  it('should ignore falsy expressions', () => {
+    expect(md`${''}${null}${undefined}${0}${false}`).toHaveLength(0);
+  });
+
   it('should parse nested calls', () => {
     expect(
       md`${bold('LCP')}: ${md`${code('1.2 s')} (score ${italic('83')})`}`
