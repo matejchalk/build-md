@@ -2,6 +2,7 @@ import type { IElement } from './elements';
 import { Renderer } from './renderer';
 
 type Items<TElement extends IElement = IElement> = (
+  | string
   | TElement
   | (string | TElement)[]
 )[];
