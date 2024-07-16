@@ -385,6 +385,65 @@ export class MarkdownDocument {
   }
 
   /**
+   * Add all blocks from another document.
+   *
+   * Useful for reusing code.
+   *
+   * @example
+   * const footerDoc = new MarkdownDocument().rule().paragraph('Some footer content.')
+   * const mainDoc = new MarkdownDocument()
+   *   // ... add main blocks ...
+   *   .$concat(footerDoc)
+   *
+   *
+   * @param document other document
+   * @returns document extended by additional blocks
+   */
+  $concat(document: Conditional<MarkdownDocument>): MarkdownDocument;
+
+  /**
+   * Add all blocks from multiple other documents.
+   *
+   * Useful for reusing code.
+   *
+   * @example
+   * const intro = new MarkdownDocument().heading(1, 'Main title').paragraph('Some text.')
+   * const chapter1 = new MarkdownDocument().heading(2, 'Chapter title').paragraph('Some text.')
+   * const chapter2 = new MarkdownDocument().heading(2, 'Chapter title').paragraph('Some text.')
+   * const conclusion = new MarkdownDocument().heading(2, 'Conclusion').paragraph('Some text.')
+   *
+   * new MarkdownDocument()
+   *   .$concat(intro)
+   *   .$concat(chapter1)
+   *   .$concat(chapter2)
+   *   .$concat(conclusion)
+   *
+   *
+   * @param document other document
+   * @returns document extended by additional blocks
+   */
+  $concat(
+    ...documents: [
+      Conditional<MarkdownDocument>,
+      Conditional<MarkdownDocument>,
+      ...Conditional<MarkdownDocument>[]
+    ]
+  ): MarkdownDocument;
+
+  $concat(
+    ...documents: [
+      Conditional<MarkdownDocument>,
+      ...Conditional<MarkdownDocument>[]
+    ]
+  ): MarkdownDocument {
+    return this.#extend(
+      documents
+        .filter(doc => doc instanceof MarkdownDocument)
+        .flatMap(doc => doc.#blocks)
+    );
+  }
+
+  /**
    * Renders document to Markdown.
    *
    * @returns Markdown string
@@ -394,13 +453,17 @@ export class MarkdownDocument {
   }
 
   #append(block: Block): MarkdownDocument {
+    return this.#extend([block]);
+  }
+
+  #extend(blocks: Block[]): MarkdownDocument {
     if (this.#options.mutable) {
-      this.#blocks.push(block);
+      this.#blocks.push(...blocks);
       return this;
     }
 
     const document = new MarkdownDocument(this.#options);
-    document.#blocks = [...this.#blocks, block];
+    document.#blocks = [...this.#blocks, ...blocks];
     return document;
   }
 }

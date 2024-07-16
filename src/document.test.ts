@@ -188,4 +188,52 @@ describe('MarkdownDocument', () => {
       '## Chapter 1\n\nContent of 1st chapter.\n\n## Chapter 2\n\nContent of 2nd chapter.\n\n## Chapter 3\n\nContent of 3rd chapter.\n'
     );
   });
+
+  it('should extend with blocks from another document', () => {
+    expect(
+      new MarkdownDocument()
+        .heading(1, 'My title')
+        .$concat(
+          new MarkdownDocument()
+            .heading(2, 'My section')
+            .paragraph('Content of section.')
+        )
+        .toString()
+    ).toBe(
+      new MarkdownDocument()
+        .heading(1, 'My title')
+        .heading(2, 'My section')
+        .paragraph('Content of section.')
+        .toString()
+    );
+  });
+
+  it('should extend with blocks from other documents while filtering out falsy expressions', () => {
+    expect(
+      new MarkdownDocument()
+        .heading(1, 'A title')
+        .$concat(
+          false,
+          new MarkdownDocument()
+            .heading(2, 'A section')
+            .paragraph('Content of section.'),
+          null,
+          '',
+          new MarkdownDocument()
+            .heading(2, 'Another section')
+            .paragraph('Content of another section.'),
+          undefined,
+          0
+        )
+        .toString()
+    ).toBe(
+      new MarkdownDocument()
+        .heading(1, 'A title')
+        .heading(2, 'A section')
+        .paragraph('Content of section.')
+        .heading(2, 'Another section')
+        .paragraph('Content of another section.')
+        .toString()
+    );
+  });
 });

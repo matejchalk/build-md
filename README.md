@@ -284,6 +284,47 @@ function createMarkdownCommentForMonorepo(
 }
 ```
 
+### 🪗 Composing documents
+
+When building complex documents, extracting some sections to other functions helps keep the code more mantainable. This is where the [`$concat`](https://matejchalk.github.io/build-md/classes/MarkdownDocument.html#_concat) method comes in useful. It accepts one or more other documents and appends their blocks to the current document. This makes it convenient to break up pieces of builder logic into functions, as well as making sections of documents easily reusable.
+
+```ts
+function createMarkdownComment(
+  totalCount: number,
+  passedCount: number,
+  logsUrl: string | null,
+  failedChecks?: string[]
+): string {
+  return (
+    new MarkdownDocument()
+      // 👇 adds heading and quote from other document
+      .$concat(createMarkdownCommentSummary(totalCount, passedCount))
+      // 👇 adds heading, list and paragraph from other document
+      .$concat(createMarkdownCommentDetails(logsUrl, failedChecks))
+      .toString()
+  );
+}
+
+function createMarkdownCommentSummary(
+  totalCount: number,
+  passedCount: number
+): MarkdownDocument {
+  return new MarkdownDocument()
+    .heading(1, `🛡️ Quality gate - ${passedCount}/${totalCount}`)
+    .quote(passedCount === totalCount && '✅ Everything in order!');
+}
+
+function createMarkdownCommentDetails(
+  logsUrl: string | null,
+  failedChecks?: string[]
+): MarkdownDocument {
+  return new MarkdownDocument()
+    .heading(2, failedChecks?.length && '❌ Failed checks')
+    .list(failedChecks?.map(md.code))
+    .paragraph(logsUrl && md.link(logsUrl, '🔗 CI logs'));
+}
+```
+
 ### 📝 Inline formatting
 
 The `md` tagged template literal is for composing text which includes Markdown elements.
