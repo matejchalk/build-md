@@ -413,13 +413,9 @@ export class MarkdownDocument {
    * const conclusion = new MarkdownDocument().heading(2, 'Conclusion').paragraph('Some text.')
    *
    * new MarkdownDocument()
-   *   .$concat(intro)
-   *   .$concat(chapter1)
-   *   .$concat(chapter2)
-   *   .$concat(conclusion)
+   *   .$concat(intro, chapter1, chapter2, conclusion)
    *
-   *
-   * @param document other document
+   * @param documents other documents
    * @returns document extended by additional blocks
    */
   $concat(

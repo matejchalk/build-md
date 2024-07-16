@@ -295,14 +295,14 @@ function createMarkdownComment(
   logsUrl: string | null,
   failedChecks?: string[]
 ): string {
-  return (
-    new MarkdownDocument()
+  return new MarkdownDocument()
+    .$concat(
       // 👇 adds heading and quote from other document
-      .$concat(createMarkdownCommentSummary(totalCount, passedCount))
+      createMarkdownCommentSummary(totalCount, passedCount),
       // 👇 adds heading, list and paragraph from other document
-      .$concat(createMarkdownCommentDetails(logsUrl, failedChecks))
-      .toString()
-  );
+      createMarkdownCommentDetails(logsUrl, failedChecks)
+    )
+    .toString();
 }
 
 function createMarkdownCommentSummary(
