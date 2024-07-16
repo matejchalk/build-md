@@ -40,7 +40,7 @@ export { Renderer } from './renderer';
 
 export type { Conditional } from './conditional';
 export type { Block, Mark } from './elements';
-export type { BlockText, InlineText } from './text';
+export type { BlockText, FormattedText, InlineText } from './text';
 
 export type { HeadingLevel } from './block/heading';
 export type { ListKind } from './block/list';

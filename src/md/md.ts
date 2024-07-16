@@ -1,8 +1,9 @@
 import type { Conditional } from './conditional';
-import type { IElement } from './elements';
+import type { Element } from './elements';
 import { Renderer } from './renderer';
+import type { FormattedText } from './text';
 
-type Items<TElement extends IElement = IElement> = Conditional<
+type Items<TElement extends Element = Element> = Conditional<
   string | TElement | (string | TElement)[]
 >[];
 type ElementOf<TItems extends Items> = TItems extends Items<infer U>
@@ -24,10 +25,10 @@ type ElementOf<TItems extends Items> = TItems extends Items<infer U>
 export function md<TItems extends Items>(
   strings: TemplateStringsArray,
   ...items: TItems
-): (string | ElementOf<TItems>)[] {
-  const result: (string | IElement)[] = strings
+): FormattedText<ElementOf<TItems>> {
+  const result = strings
     .flatMap((text, i) => {
-      const item = items[i];
+      const item = items[i] as Items<ElementOf<TItems>>[number];
       if (item) {
         if (Array.isArray(item)) {
           return [text, ...item];
@@ -45,5 +46,5 @@ export function md<TItems extends Items>(
       .join('');
   };
 
-  return result as (string | ElementOf<TItems>)[];
+  return result;
 }

@@ -1,30 +1,29 @@
-import type { Renderer } from './renderer';
+import { Renderer } from './renderer';
 
 /** Markdown/HTML element */
-export interface IElement {
+export abstract class Element {
   /** Format element as Markdown string */
-  render(renderer: Renderer): string;
+  abstract render(renderer: Renderer): string;
   /** Format element as HTML string */
-  renderAsHtml(renderer: Renderer): string;
+  abstract renderAsHtml(renderer: Renderer): string;
   /** Format element as single-line Markdown/HTML string */
-  renderInline(renderer: Renderer): string;
+  abstract renderInline(renderer: Renderer): string;
+
+  /** Render as Markdown string */
+  toString(): string {
+    return this.render(new Renderer());
+  }
 }
 
 /** Markdown/HTML block element */
-export abstract class Block implements IElement {
-  abstract render(renderer: Renderer): string;
-  abstract renderAsHtml(renderer: Renderer): string;
-
+export abstract class Block extends Element {
   renderInline(renderer: Renderer): string {
     return this.renderAsHtml(renderer);
   }
 }
 
 /** Markdown/HTML inline element */
-export abstract class Mark implements IElement {
-  abstract render(renderer: Renderer): string;
-  abstract renderAsHtml(renderer: Renderer): string;
-
+export abstract class Mark extends Element {
   renderInline(renderer: Renderer): string {
     return this.render(renderer);
   }

@@ -4,6 +4,7 @@ export { md } from './md';
 export type {
   BlockText,
   Conditional,
+  FormattedText,
   HeadingLevel,
   InlineText,
   ListKind,
