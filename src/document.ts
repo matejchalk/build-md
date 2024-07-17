@@ -287,11 +287,11 @@ export class MarkdownDocument {
    *   .details('text hidden until expanded')
    *   .details(md`text with ${bold('inline')} and ${list(['block'])} elements.`)
    *
-   * @param text plain string or text with inline or block formatting
+   * @param text plain string, text with inline or block formatting, or another document
    * @returns document with additional details block
    * @see {@link md.details}
    */
-  details(text: Conditional<BlockText>): MarkdownDocument;
+  details(text: Conditional<BlockText | MarkdownDocument>): MarkdownDocument;
 
   /**
    * Adds expandable **details** element (unless empty) to document, with custom **summary** text.
@@ -307,20 +307,28 @@ export class MarkdownDocument {
    *   )
    *
    * @param summary plain string or text with inline formatting
-   * @param text plain string or text with inline or block formatting
+   * @param text plain string, text with inline or block formatting, or another document
    * @returns document with additional details block
    * @see {@link md.details} method
    */
-  details(summary: InlineText, text: Conditional<BlockText>): MarkdownDocument;
+  details(
+    summary: InlineText,
+    text: Conditional<BlockText | MarkdownDocument>
+  ): MarkdownDocument;
 
   details(
     summaryOrText: InlineText | Conditional<BlockText>,
-    optionalText?: Conditional<BlockText>
+    optionalText?: Conditional<BlockText | MarkdownDocument>
   ): MarkdownDocument {
     const text = optionalText ?? summaryOrText;
     const summary = optionalText && summaryOrText ? summaryOrText : '';
     if (!text) return this;
-    return this.#append(md.details(summary, text));
+    return this.#append(
+      md.details(
+        summary,
+        text instanceof MarkdownDocument ? text.#blocks : text
+      )
+    );
   }
 
   /**

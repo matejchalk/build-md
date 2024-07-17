@@ -11,4 +11,5 @@ export type {
   TableCellAlignment,
   TableColumn,
   TableColumnObject,
+  TableRow,
 } from './md';

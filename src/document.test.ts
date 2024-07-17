@@ -236,4 +236,24 @@ describe('MarkdownDocument', () => {
         .toString()
     );
   });
+
+  it('should embed other documents in blocks', () => {
+    expect(
+      new MarkdownDocument()
+        .heading(1, 'Main title')
+        .details(
+          'summary',
+          new MarkdownDocument().heading(2, 'Sub-title').table(['x', 'y'], [])
+        )
+        .toString()
+    ).toBe(
+      new MarkdownDocument()
+        .heading(1, 'Main title')
+        .details(
+          'summary',
+          md`${md.heading(2, 'Sub-title')}${md.table(['x', 'y'], [])}`
+        )
+        .toString()
+    );
+  });
 });
