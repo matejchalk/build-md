@@ -53,7 +53,7 @@ export class CodeBlock extends Block {
       tag: 'pre',
       content: renderer.renderHtmlElement({
         tag: 'code',
-        content: this.text,
+        content: this.text.replace(/\n/g, '&#13;'),
       }),
     });
   }

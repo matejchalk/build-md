@@ -243,10 +243,10 @@ describe('table', () => {
       ).render(renderer)
     ).toBe(
       `
-| Style             | Description                                                                                                                                                               |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| CSS Modules       | Styles written in CSS files, generates unique class names.<br />(Preprocessors like SCSS also supported.)                                                                 |
-| Styled Components | CSS-in-JS syntax for creating React components. Example:<pre><code>const Section = styled.section\`<br />  background: lightgrey;<br />  padding: 4em;<br />\`</code></pre> |
+| Style             | Description                                                                                                                                                            |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CSS Modules       | Styles written in CSS files, generates unique class names.<br />(Preprocessors like SCSS also supported.)                                                              |
+| Styled Components | CSS-in-JS syntax for creating React components. Example:<pre><code>const Section = styled.section\`&#13;  background: lightgrey;&#13;  padding: 4em;&#13;\`</code></pre> |
 `.trim()
     );
   });

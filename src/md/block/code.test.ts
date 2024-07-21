@@ -27,4 +27,10 @@ describe('code', () => {
       '<pre><code>npm install build-md</code></pre>'
     );
   });
+
+  it('should replace new lines in html', () => {
+    expect(
+      codeBlock('json', '{\n  "foo": "bar"\n}').renderAsHtml(renderer)
+    ).toBe('<pre><code>{&#13;  "foo": "bar"&#13;}</code></pre>');
+  });
 });

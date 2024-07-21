@@ -82,10 +82,10 @@ export default {
         'Define your options in a ',
         code('zod2md.config.ts'),
         ' file, e.g.:',
-        codeBlock('ts', `export default {\n  entry: './src/schemas.ts'\n}`),
+        codeBlock('ts', `export default { entry: './src/schemas.ts' }`),
       ]).renderAsHtml(renderer)
     ).toBe(
-      "<details><summary>Advanced setup</summary>Define your options in a <code>zod2md.config.ts</code> file, e.g.:<pre><code>export default {\n  entry: './src/schemas.ts'\n}</code></pre></details>"
+      "<details><summary>Advanced setup</summary>Define your options in a <code>zod2md.config.ts</code> file, e.g.:<pre><code>export default { entry: './src/schemas.ts' }</code></pre></details>"
     );
   });
 
