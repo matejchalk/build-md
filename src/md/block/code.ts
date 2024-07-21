@@ -51,6 +51,7 @@ export class CodeBlock extends Block {
   renderAsHtml(renderer: Renderer): string {
     return renderer.renderHtmlElement({
       tag: 'pre',
+      ...(this.lang && { attrs: { lang: this.lang } }),
       content: renderer.renderHtmlElement({
         tag: 'code',
         content: this.text.replace(/\n/g, '&#13;'),

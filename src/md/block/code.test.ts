@@ -22,15 +22,15 @@ describe('code', () => {
     );
   });
 
-  it('should ignore lang in html', () => {
+  it('should use lang attribute in html', () => {
     expect(codeBlock('sh', 'npm install build-md').renderAsHtml(renderer)).toBe(
-      '<pre><code>npm install build-md</code></pre>'
+      '<pre lang="sh"><code>npm install build-md</code></pre>'
     );
   });
 
   it('should replace new lines in html', () => {
-    expect(
-      codeBlock('json', '{\n  "foo": "bar"\n}').renderAsHtml(renderer)
-    ).toBe('<pre><code>{&#13;  "foo": "bar"&#13;}</code></pre>');
+    expect(codeBlock('{\n  "foo": "bar"\n}').renderAsHtml(renderer)).toBe(
+      '<pre><code>{&#13;  "foo": "bar"&#13;}</code></pre>'
+    );
   });
 });
