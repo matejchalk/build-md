@@ -426,20 +426,9 @@ export class MarkdownDocument {
    * @param documents other documents
    * @returns document extended by additional blocks
    */
-  $concat(
-    ...documents: [
-      Conditional<MarkdownDocument>,
-      Conditional<MarkdownDocument>,
-      ...Conditional<MarkdownDocument>[]
-    ]
-  ): MarkdownDocument;
+  $concat(...documents: Conditional<MarkdownDocument>[]): MarkdownDocument;
 
-  $concat(
-    ...documents: [
-      Conditional<MarkdownDocument>,
-      ...Conditional<MarkdownDocument>[]
-    ]
-  ): MarkdownDocument {
+  $concat(...documents: Conditional<MarkdownDocument>[]): MarkdownDocument {
     return this.#extend(
       documents
         .filter(doc => doc instanceof MarkdownDocument)
