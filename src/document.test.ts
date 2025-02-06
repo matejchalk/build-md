@@ -2,8 +2,8 @@ import { MarkdownDocument } from './document';
 import { md } from './md';
 
 describe('MarkdownDocument', () => {
-  it('should render basic block elements', () => {
-    expect(
+  it('should render basic block elements', async () => {
+    await expect(
       new MarkdownDocument()
         .heading(1, 'Contributing')
         .paragraph(
@@ -43,8 +43,8 @@ describe('MarkdownDocument', () => {
     ).toMatchFileSnapshot('__snapshots__/basic-blocks.md');
   });
 
-  it('should render basic inline elements', () => {
-    expect(
+  it('should render basic inline elements', async () => {
+    await expect(
       new MarkdownDocument()
         .heading(1, 'zod2md')
         .paragraph(
@@ -70,8 +70,8 @@ describe('MarkdownDocument', () => {
     ).toMatchFileSnapshot('__snapshots__/basic-inline.md');
   });
 
-  it('should render block and inline elements from extended syntax', () => {
-    expect(
+  it('should render block and inline elements from extended syntax', async () => {
+    await expect(
       new MarkdownDocument()
         .heading(1, 'CLI')
         .table(
