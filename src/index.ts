@@ -1,6 +1,8 @@
 export { MarkdownDocument } from './document';
 
 export {
+  // @ts-expect-error abstract class is valid runtime export
+  Block,
   BoldMark,
   CodeBlock,
   CodeMark,
@@ -10,6 +12,8 @@ export {
   ImageMark,
   ItalicMark,
   LinkMark,
+  // @ts-expect-error abstract class is valid runtime export
+  Mark,
   md,
   OrderedListBlock,
   ParagraphBlock,
@@ -19,14 +23,12 @@ export {
   TableBlock,
   TaskListBlock,
   UnorderedListBlock,
-  type Block,
   type BlockText,
   type Conditional,
   type FormattedText,
   type HeadingLevel,
   type InlineText,
   type ListKind,
-  type Mark,
   type TableCellAlignment,
   type TableColumn,
   type TableColumnObject,
