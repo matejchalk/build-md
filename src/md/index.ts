@@ -42,11 +42,30 @@ export type { Conditional } from './conditional';
 export type { Block, Mark } from './elements';
 export type { BlockText, FormattedText, InlineText } from './text';
 
-export type { HeadingLevel } from './block/heading';
-export type { ListKind } from './block/list';
-export type {
-  TableCellAlignment,
-  TableColumn,
-  TableColumnObject,
-  TableRow,
+export { CodeBlock } from './block/code';
+export { DetailsBlock } from './block/details';
+export { HeadingBlock, type HeadingLevel } from './block/heading';
+export {
+  OrderedListBlock,
+  TaskListBlock,
+  UnorderedListBlock,
+  type ListKind,
+} from './block/list';
+export { ParagraphBlock } from './block/paragraph';
+export { QuoteBlock } from './block/quote';
+export { RuleBlock } from './block/rule';
+export {
+  TableBlock,
+  type TableCellAlignment,
+  type TableColumn,
+  type TableColumnObject,
+  type TableRow,
 } from './block/table';
+
+export { BoldMark } from './inline/bold';
+export { CodeMark } from './inline/code';
+export { FootnoteMark } from './inline/footnote';
+export { ImageMark } from './inline/image';
+export { ItalicMark } from './inline/italic';
+export { LinkMark } from './inline/link';
+export { StrikethroughMark } from './inline/strikethrough';
