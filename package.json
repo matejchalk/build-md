@@ -1,6 +1,6 @@
 {
   "name": "build-md",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "Markdown builder for JS/TS",
   "license": "MIT",
   "author": "Matěj Chalk <matejchalk@gmail.com>",
